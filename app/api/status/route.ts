@@ -1,0 +1,3 @@
+import {z} from 'zod';
+import {api,oneClick} from '@/lib/server';
+export async function GET(request:Request){return api(request,async()=>{const params=new URL(request.url).searchParams;const address=z.string().regex(/^[a-zA-Z0-9._:-]{2,128}$/).parse(params.get('depositAddress'));const memo=params.get('depositMemo');const query=new URLSearchParams({depositAddress:address});if(memo)query.set('depositMemo',z.string().max(256).parse(memo));return {mode:'live',result:await oneClick('/status?'+query.toString()),notice:'Read-only status. Demo invoices are never updated from an unrelated deposit address.'};});}

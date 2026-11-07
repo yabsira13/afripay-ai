@@ -1,0 +1,7 @@
+import type { Workspace } from './types';
+import { CLEAN_SAMPLE } from './invoice';
+export function emptyWorkspace():Workspace{return {business:'',owner:'',currency:'USD',invoices:[],suppliers:[],payments:[],events:[],audits:[],policy:{singleLimit:1000,dailyLimit:5000,manualHighRisk:true}};}
+export function seed(): Workspace {return {
+ business:'Sample business',owner:'Demo user',currency:'USD',
+ suppliers:[{id:'supplier-1',name:'Shenzhen Nova Trading',wallet:'0x4a6b9f3d82e150c769a205d18f3b47c9e602a8d1',chain:'base',trusted:true},{id:'supplier-2',name:'Kigali Creative Studio',wallet:'kigalicreative.near',chain:'near',trusted:true},{id:'supplier-3',name:'Lagos Logistics',wallet:'0x72a9b694c12f2ea2869a791bd80f5d1c38b6c591',chain:'base',trusted:true}],
+ invoices:[{id:'invoice-demo-1',number:'INV-2026-014',supplier:'Shenzhen Nova Trading',amount:'200',currency:'USDC',wallet:'0x4a6b9f3d82e150c769a205d18f3b47c9e602a8d1',chain:'base',due:'2026-11-12',status:'Needs review',verified:false,text:CLEAN_SAMPLE,createdAt:'2026-11-04T09:20:00Z'},{id:'invoice-demo-2',number:'INV-2026-011',supplier:'Kigali Creative Studio',amount:'450',currency:'USDC',wallet:'kigalicreative.near',chain:'near',due:'2026-11-10',status:'Ready to pay',verified:true,text:'Design services',createdAt:'2026-11-03T10:20:00Z'}],payments:[],events:[],audits:[],policy:{singleLimit:1000,dailyLimit:5000,manualHighRisk:true}};}

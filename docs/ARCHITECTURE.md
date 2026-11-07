@@ -1,0 +1,100 @@
+# AFRIPAY AI architecture
+
+Research date: 2026-11-04. Sources are retained in `docs/research`.
+
+Next.js App Router + React + TypeScript + Tailwind. A browser-local, explicitly labeled demo provides a complete invoice-to-simulated-receipt journey. Demo records never enter live transaction tables. Supabase Auth and PostgreSQL provide the production identity and row-level access boundary. No private keys are stored.
+
+```mermaid
+flowchart LR
+ U[Business user] --> UI[Next.js workspace]
+ UI --> OCR[Browser PDF text / image OCR]
+ UI --> API[Validated server routes]
+ API --> R[Deterministic risk engine]
+ API --> AI[Optional structured AI extraction]
+ API --> DB[(Supabase Auth + PostgreSQL RLS)]
+ API --> Q[NEAR Intents 1Click]
+ UI --> W[NEAR Connect wallet]
+ W --> N[NEAR mainnet]
+ Q --> S[Settlement status]
+ S --> DB
+```
+
+## Payment trust boundary
+AI prepares proposals only. Risk is evaluated before approval. Critical risk is blocked; high risk requires manual review. Dry quotes use the official API. Mainnet funding is fail-closed in this release: connecting a wallet does not enable payments. A production transaction coordinator with atomic spending reservations, approved quote binding, idempotency, signed quote verification and settlement reconciliation must be enabled before mainnet money moves. Never infer settlement from a wallet submission or a timer. Demo settlement is a separate, explicit action.
+
+The official API endpoints are GET `/v0/tokens`, POST `/v0/quote`, GET `/v0/status`, optional POST `/v0/deposit/submit` on `https://1click.chaindefuser.com`. Dry quotes omit deposit fields. Amounts are integer strings converted using token decimals, never floating-point arithmetic. Slippage is basis points. `SUCCESS` is distinct from `FAILED`, `REFUNDED`, and `INCOMPLETE_DEPOSIT`. Refunds do not mark invoices paid. No Intents testnet exists.
+
+## Evidence and limitations
+Risk score is a reproducible capped sum with explicit source labels. Unknown wallet history is not evidence of fraud. NEAR RPC account existence is an observation, not a clean bill of health. No threat-intelligence feed is configured by default. URL analysis is local string analysis and never follows links. QR image decoding and exhaustive redirect analysis are not implemented. OCR output is untrusted and always requires recipient verification.
+
+## Runtime modes
+Demo data is local to the browser and may be reset. Authenticated production identity uses Supabase, but live business persistence and funded payment coordination are intentionally not exposed as ready. Public analysis APIs do not accept execution instructions. Per-instance rate limits are suitable for development; use an edge/distributed limiter in production. CSP needs a deployment-specific allowlist for wallet iframe manifests and OCR workers before hardening.
+
+## Hackathon
+Deadline 2026-11-14 23:59 UTC. Primary track `realworld`; verify security track ID in retained rules before submitting. Public repository, demo video and founder's X post required. No submission is sent automatically. Exact final submission payload requires the founder's confirmation under official rules.
+
+## 0.2.0 additions
+
+`account_profiles` stores account-owned identity/business fields; signup metadata can prefill customer/supplier preferences but cannot grant admin rights. Guest sample identity is separate from authenticated identity. Profile migrations are independent of existing supplier moderation and mainnet financial tables.
+
+A dedicated NEAR testnet module uses a separate connector/storage namespace, explicit testnet network/feature selection, `.testnet`-only accounts and a 1-test-NEAR cap. The wallet builds exactly one native Transfer; no server or model signs. Read-only testnet RPC routes verify the hash, source, recipient, atomic amount, final execution and recipient receipt. Testnet results do not update demo invoices or mainnet ledgers. Its local history is not a security ledger, and persisted success labels must be rechecked. Mainnet Intents execution remains disabled.
+
+
+## v0.3 persistence and model boundary
+
+```mermaid
+flowchart LR
+  Guest[Guest simulation] --> Local[Browser-local examples]
+  Account[Signed-in simulation] --> Cache[Per-account local cache]
+  Account --> RPC[Owner-bound RPC with expected revision]
+  RPC --> DB[(Supabase private demo document)]
+  Account --> API[Authenticated AI route]
+  API --> Model[Configured structured model]
+  Model --> Validate[Schema and message grounding]
+  Validate --> Proposal[Proposal only]
+  Proposal --> Human[Human review and deterministic security]
+```
+
+The cloud document contains only simulated invoices, payments, supplier examples, policy, risk reports and editable demo audit entries. The save RPC derives ownership from `auth.uid()` and permits no direct browser writes. Owner-only reads use RLS. Saves use expected revisions to reject stale writes; the client serializes requests and warns on conflicts. Signed-in database operations pin the account's bearer token to prevent an auth switch from applying an old account's queued document under the new account. No guest records are automatically imported into an account.
+
+Model endpoints require Supabase `getUser(token)` verification before paid inference. They pass untrusted text as data, request strict JSON, validate output again server-side and never expose wallet tools. Amounts/assets/recipients absent from a user message are rejected; missing fields remain missing. Invoice model outputs cannot mark verification and an address not present in source text is rejected. Responses identify local parsing versus a configured model.
+
+These controls do not turn client-editable simulation state into a production ledger. Durable mainnet reservations, bound approvals, immutable financial audit records, distributed rate limits and settlement reconciliation remain separate required work.
+
+
+## v0.4 runtime bootstrap
+
+`/api/config` dynamically validates public Supabase settings on the running server. The browser initializes its shared account client from this no-store response before subscribing to auth state. Account-owned operations continue to pin the current user's token. The public endpoint never returns SMTP/model/partner secrets. Missing setup stays unavailable rather than pretending registration succeeds; local users get CLI repair steps.
+
+Administrator membership is checked for the current account before displaying navigation or mounting the separate console. Supabase's existing restricted admin RPCs remain authoritative. No additional admin privilege or database migration is introduced by the 0.4 UI changes.
+
+
+## v0.5 account credits and public observations
+
+```mermaid
+flowchart LR
+  Guest[Guest invoice review] --> Login[Explicit sign-in continuation]
+  Login --> Private[Private empty-by-default workspace]
+  A[Signed-in payer] --> Review[Human review: recipient code and DUSD amount]
+  Review --> RPC[Restricted atomic test-credit RPC]
+  RPC --> Debit[(Payer test-credit balance)]
+  RPC --> Credit[(Recipient test-credit balance)]
+  RPC --> Journal[(Balanced immutable-to-user entries)]
+  Public[Public read-only lookup] --> Near[Fixed NEAR RPC providers]
+  Near --> Evidence[Account/transaction observations]
+```
+
+DUSD uses integer atomic units (100 per credit), zero initial balances and an explicit once-only grant. The security-definer transfer function derives sender from auth.uid(), locks both account rows in a stable order, binds approval ID to recipient/amount, enforces single/daily limits and available funds, updates both balances and inserts transfer/journal rows in one database transaction. No direct user ledger writes are permitted. This is a closed simulation ledger; it does not authorize real funds or settle USDC invoices.
+
+Public NEAR lookups validate network/account/hash, use fixed provider allowlists and receipt-capable EXPERIMENTAL_tx_status, and require matching hash/sender plus complete final receipt success. Existing native testnet verification now uses the same receipt-capable method. Native Transfer action amounts are decoded; contract-token amounts are not inferred. Unknown provider data remains unknown and is never used to update invoice settlement.
+
+Feedback is account-owned under RLS; administrators can read submissions. Insert grants exclude created_at/id so a client cannot backdate feedback to bypass the per-account rate policy. Public contact/credits are the exact founder-approved values. Policy date and publication date are separate; publication remains unset.
+
+
+## v0.6 shared activity and receipts
+
+One scoped credit-ledger hook supplies Dashboard, Pay, Transfer, Receive and Transactions. It refreshes after mutations/focus and validates its schema/owner. Receive totals exclude faucet grants; activity aggregates all credit transactions and displays the newest 100. Legacy invoice previews are a separately labeled source on the Transactions page, excluded from recorded credit totals.
+
+An additive migration snapshots participant labels, adds purpose/supplier/invoice references and exposes participant-only canonical receipts. A separate PDF generator consumes that canonical DUSD receipt and its fixed recorded timestamp. It never creates a blockchain hash.
+
+Supplier payments hold an approved supplier snapshot and, when linked, the payer's saved invoice/workspace revision. Backend checks derive the recipient from the application owner. Invoice update, debit, credit and journal recording share the database transaction. Idempotent replays return the recorded row before reconsidering later invoice/supplier edits; changed payloads under the same approval ID are rejected.

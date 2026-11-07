@@ -1,0 +1,55 @@
+{
+  "notice": "Read-only observation of public chain data. The mainnet reference transaction already existed and was NOT sent by AFRIPAY. This is not proof of a funded AFRIPAY invoice payment.",
+  "checks": {
+    "wallet": {
+      "http": 200,
+      "data": {
+        "mode": "live",
+        "readOnly": true,
+        "network": "testnet",
+        "accountId": "faucet.testnet",
+        "balance": "31.632180734469354699999998",
+        "locked": "0",
+        "asset": "NEAR",
+        "blockHeight": 276466828,
+        "blockHash": "Bp59nxQu3CMU1xWeuAMWSzeaxKkDDEA1SqNqWg2Mn18T",
+        "storageBytes": 264,
+        "provider": "https://test.rpc.fastnear.com",
+        "checkedAt": "2026-11-06T09:03:08.739Z",
+        "evidence": [
+          {
+            "source": "observation",
+            "reason": "Account state was retrieved at finality from the selected NEAR network."
+          },
+          {
+            "source": "unknown",
+            "reason": "No external scam intelligence or historical movement analysis was performed. Account activity alone does not establish safety or maliciousness."
+          }
+        ]
+      }
+    },
+    "transaction": {
+      "http": 200,
+      "data": {
+        "mode": "live",
+        "readOnly": true,
+        "network": "mainnet",
+        "hash": "DBkCLtUpXQER6DAj5Yud1nDTmKidcLgKfWkw1pNiFsot",
+        "sender": "8p6pload.near",
+        "recipient": "wrap.near",
+        "status": "confirmed",
+        "actions": [
+          "FunctionCall",
+          "FunctionCall"
+        ],
+        "nativeTransferAmount": "0",
+        "asset": "NEAR",
+        "finalExecution": "FINAL",
+        "blockHash": "BAPUjaEMKueYcji3fpnJZKspE7tMeVGa7qV7LNDYQq7r",
+        "notice": "Final successful execution was observed. This does not establish that the recipient or invoice is legitimate.",
+        "provider": "https://free.rpc.fastnear.com",
+        "checkedAt": "2026-11-06T09:03:08.898Z"
+      }
+    }
+  }
+}

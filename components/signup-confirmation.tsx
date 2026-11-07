@@ -1,0 +1,10 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {Mail,ArrowRight,RefreshCw} from 'lucide-react';
+export default function SignupConfirmation({email,onResend,onSignIn,onChangeEmail}:{email:string;onResend:()=>Promise<void>;onSignIn:()=>void;onChangeEmail:()=>void}){
+ const [retryAt,setRetryAt]=useState(()=>Date.now()+60000),[now,setNow]=useState(Date.now),[busy,setBusy]=useState(false),[status,setStatus]=useState('');
+ useEffect(()=>{const interval=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(interval);},[]);
+ const wait=Math.max(0,Math.ceil((retryAt-now)/1000));
+ async function resend(){if(wait||busy)return;setBusy(true);setStatus('');try{await onResend();setStatus('Confirmation email requested. Please check your inbox and spam folder.');setRetryAt(Date.now()+60000);setNow(Date.now());}catch(error){setStatus((error as Error).message);}finally{setBusy(false);}}
+ return <section className="signup-confirmation" role="status" aria-live="polite"><span className="confirmation-icon"><Mail size={30}/></span><span className="eyebrow">ONE MORE STEP</span><h2>Check your email</h2><p>For a new account, check the inbox for your confirmation link:</p><strong className="confirmation-email">{email}</strong><ol><li>Open the email from AFRIPAY or Supabase.</li><li>Click the confirmation link.</li><li>Return here and sign in.</li></ol><p className="fine">Already registered with this email? Use Sign in or Forgot password instead. Existing accounts may not receive another signup email. Check Spam for new-account confirmations; delivery can also be limited by the email provider.</p><button className="btn primary full" type="button" onClick={onSignIn}>I confirmed my email — Sign in <ArrowRight size={16}/></button><button type="button" className="btn secondary full" disabled={busy||wait>0} onClick={resend}><RefreshCw size={15}/>{wait?`Resend email in ${wait}s`:busy?'Requesting email…':'Resend confirmation email'}</button>{status&&<p className="confirmation-status">{status}</p>}<button type="button" className="text-btn" onClick={onChangeEmail}>Use a different email</button></section>;
+}

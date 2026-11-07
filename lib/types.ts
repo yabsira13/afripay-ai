@@ -1,0 +1,11 @@
+export type RiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
+export type Evidence = { code: string; points: number; reason: string; source: 'confirmed' | 'observation' | 'heuristic' | 'unknown' };
+export type Risk = { score: number; level: RiskLevel; evidence: Evidence[]; recommendation: string; blocked: boolean };
+export type Invoice = { id: string; number: string; supplier: string; amount: string; currency: string; wallet: string; chain: string; due: string; status: 'Needs review' | 'Ready to pay' | 'Paid (demo)' | 'Flagged'; verified: boolean; text: string; createdAt: string; risk?: Risk; creditTransferId?:string };
+export type Supplier = { id: string; name: string; wallet: string; chain: string; trusted: boolean };
+export type Payment = { id: string; invoiceId?: string; supplier: string; amount: string; asset: string; recipient: string; chain: string; status: 'Pending approval' | 'Processing (demo)' | 'Settled (demo)' | 'Failed (demo)' | 'Refunded (demo)'; createdAt: string; mode: 'demo'; risk: Risk; receipt?: string };
+export type SecurityEvent = { id: string; title: string; risk: Risk; at: string; read: boolean };
+export type Audit = { id: string; at: string; action: string; detail: string; mode: 'demo' };
+export type Policy = { singleLimit: number; dailyLimit: number; manualHighRisk: boolean };
+export type Workspace = { invoices: Invoice[]; suppliers: Supplier[]; payments: Payment[]; events: SecurityEvent[]; audits: Audit[]; policy: Policy; business: string; owner: string; currency: string };
+export type Token = { assetId: string; decimals: number; blockchain: string; symbol: string; contractAddress?: string; price?: number };
