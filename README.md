@@ -2,61 +2,168 @@
 
 **Intelligent Payments. Borderless Business.**
 
-NEAR Hackathon 2026 prototype for African businesses: invoice extraction, explainable transaction protection, a human-approved payment simulation, and optional genuine NEAR Intents dry quotes.
+AFRIPAY AI helps African businesses review supplier invoices, detect suspicious payment instructions and approve payments with evidence in view. Built for **NEAR HACKATHON 2026**, primarily Real-World Money, with security features relevant to AI Security & Defense.
 
-**Version 0.6.0: functional prototype; funded mainnet payments remain disabled.** Demo invoices/payments stay simulated, including cloud-backed records. A separate native NEAR testnet lab requires wallet authorization and checks actual final execution on testnet. Private profiles and supplier applications use Supabase after their migrations are installed; signed-in demo invoice/payment records can sync privately to Supabase after installing `supabase/workspace-sync.sql`; guest records stay browser-local. No private keys, fabricated blockchain hashes or timer-based real confirmations are used.
+- **Live prototype:** https://afripay-ai.vercel.app/
+- **Public repository:** https://github.com/yabsira13/afripay-ai
+- **Version:** 0.6.0
+- **Founder and developer:** Yabsera Teklemariyam
+- **Contact:** yabsiratekle@gmail.com
 
-## Start in two commands
+**This is a hackathon prototype. DUSD transfers are valueless database test credits, not NEAR, USDC or bank payments. Funded mainnet NEAR Intents payments are unfinished and disabled.**
 
-Install Node.js 24 LTS, then in this folder:
+## What works
+
+| Area | Current behavior |
+| --- | --- |
+| Invoice intelligence | PDF text extraction, English image OCR, editable fields and explicit recipient verification |
+| Security Shield | Explainable risk scores, duplicate checks, changed supplier wallets, suspicious instructions and URL heuristics |
+| Pay | Human-approved DUSD payments to approved registered suppliers; optional verified invoice binding |
+| Transfer and Receive | Account receive codes, recipient review, atomic debit/credit, named counterparties and received totals |
+| Receipts | Sender and receiver see the same reference, amount, recorded names and branded PDF |
+| Accounts | Supabase signup, confirmation, sign-in, recovery, private profiles and account-owned demo storage |
+| NEAR | Read-only mainnet balance, public wallet/transaction observations and a separate native NEAR testnet transfer lab |
+| NEAR Intents | Official 1Click token discovery, genuine dry quotes when available and read-only status lookup |
+| Assistant | Structured local payment proposals; optional authenticated model interface; no wallet execution tools |
+| Business tools | Supplier application/review, restricted administrator console, analytics, policies and private feedback |
+
+New workspaces start empty. Examples load only when selected. Connecting a wallet does not sign you into AFRIPAY or create an email account's wallet.
+
+## Try the hosted demo
+
+Open https://afripay-ai.vercel.app/. Guest invoice/security exploration is available without an account. Approval, private account activity and built-in downloads require sign-in. No wallet or real funds are needed for the DUSD demonstration.
+
+### 1. Extract and review an invoice
+
+1. Choose **Invoices → Upload invoice → Try a clean invoice**.
+2. Click **Extract fields** → see 200 USDC and Shenzhen Nova Trading.
+3. Review the number, supplier, amount, wallet and chain. Extraction does not approve the recipient.
+4. For this labeled sample only, review its sample destination, tick recipient verification and click **Save & run security checks**. For an actual invoice, verify through a known supplier contact first.
+5. See the evidence report. Importing the same invoice again demonstrates duplicate detection.
+
+Extraction fills the form; saving advances the workflow. A downloaded payment receipt is not a new supplier invoice.
+
+### 2. Demonstrate invoice fraud protection
+
+After saving the clean sample, choose **Try a suspicious invoice**, extract and review it. The sample establishes a supplier comparison record when loaded. Inspect the changed destination and unsafe instruction evidence. Critical-risk invoice previews are blocked. This is a synthetic scenario, not external intelligence about an actual scammer.
+
+### 3. Transfer credits between two accounts
+
+1. Create and confirm two accounts. Use separate browser profiles or a normal/private window.
+2. In each account open **Receive**, set a receipt display name and find its receive code.
+3. In account A explicitly claim the once-only **1,000 DUSD** test grant. New accounts otherwise have zero balance.
+4. Copy B's code. In A choose **Transfer**, enter the code and **200 DUSD**, review the resolved name and approve.
+5. See A's balance become **800 DUSD** and B's become **200 DUSD**, if both started at zero and only A claimed the grant.
+6. Open **Transactions** or **Receive** and download the receipt in both accounts → matching reference, participants, amount and date.
+
+Received totals exclude the test grant. Names are chosen by accounts, not verified legal identities. Repeating an approval after a lost response cannot debit twice. Existing accounts retain their previous balances and grant status.
+
+### 4. Pay an approved supplier
+
+1. The supplier registers, applies through **Become a supplier**, and opens **Receive** to activate its credit account.
+2. An operator-appointed administrator reviews the application. Ordinary accounts cannot appoint themselves or review suppliers.
+3. In the payer account choose **Pay**, select the approved supplier and an amount. Start with **No invoice** for a simple test.
+4. Review and explicitly approve → payer debit, supplier credit and a shared receipt.
+5. Optionally link a saved verified invoice matching the supplier's business, reviewed wallet, chain and amount. Wait for cloud saving before approval.
+
+The database checks current approval, invoice revision, spending policies, duplicates and available funds. A linked invoice becomes **Paid (demo)** only after the atomic credit operation succeeds. Linked USD/USDC/USDT/DUSD amounts use a one-for-one illustration, not real FX conversion or asset settlement.
+
+### 5. Explore NEAR and invoice previews
+
+- **Live wallet** shows actual native NEAR balance when RPC is available; it does not execute mainnet payments or value other tokens in USD.
+- **NEAR explorer** reads public wallet state or final transaction execution on the explicitly selected network. Unknown or unavailable data stays unknown.
+- **NEAR testnet** is a separate native transfer lab using test tokens, review, user wallet authorization and final RPC checks. It does not settle demo invoices.
+- **Open invoice preview** preserves route comparison, risk review and explicit simulated settled/failed/refunded outcomes. These previews do not move DUSD. Their history is labeled separately.
+- In the preview, **Live NEAR Intents dry quote** requests real API data when supported. Upstream failures are displayed, never replaced with simulated quotes. No funding or success is implied by a dry quote.
+
+NEAR Intents 1Click is mainnet-only; a native NEAR testnet transfer is not an Intents testnet swap. Mainnet funding, committed quotes and automatic settlement reconciliation are not implemented.
+
+## Run locally
+
+Install **Node.js 24 LTS**. Clone the repository, open its folder and run:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. No credentials are required. See [deployment instructions](docs/DEPLOYMENT.md) for accounts, environment variables and hosting.
+Open the Local URL printed by Next.js, usually http://localhost:3000. Guest exploration needs no credentials. On Windows PowerShell, use `npm.cmd` if script execution policy blocks `npm`.
 
-## Judge's walkthrough
+### Configure accounts
 
-1. Open **Invoices → Upload invoice**, choose **Try a clean invoice**, then **Extract fields**. See 200 USDC and Shenzhen Nova Trading.
-2. Change the invoice number if you want to import it in addition to the existing demo invoice. The initial workspace intentionally already contains INV-2026-014, so importing it unchanged demonstrates duplicate detection.
-3. Independently review the full wallet and destination chain, then check the verification box and save. See the evidence report. Extracted wallets are never silently approved.
-4. Choose **Prepare payment → Check security & compare routes**. Inspect risk, recipient and limits. The default route is explicitly illustrative.
-5. Optional: switch to **Live NEAR Intents dry quote**, load supported tokens, select a source amount, compatible destination asset and your source-chain refund address. A successful response is actual API data. Upstream failures are shown as failures, never replaced with demo quotes. Mainnet 1Click endpoints may be blocked by some hosting networks.
-6. For the safe demo, choose **Review demo payment**, confirm recipient/amount/minimum output, then approve. No wallet signing or real funding occurs.
-7. In **Transaction monitor**, explicitly choose **Simulate confirmed settlement**. The invoice changes to **Paid (demo)**. In **Transactions**, download the clearly labeled PDF receipt. Choose failure/refund on another demo to see that its invoice stays unpaid.
-8. Upload **Try a suspicious invoice**. Its supplier matches the saved record but its wallet changes, and its text asks to bypass verification. The report shows the exact discrepancy and blocks payment at critical risk.
-9. In **Security Shield**, try wallet analysis and Link protection. Unknown history is explicitly unknown; links are never opened.
-10. Ask the assistant **“Pay my supplier 200 USDC.”** Inspect its structured proposal and missing fields. The assistant cannot execute it.
+Copy `.env.example` to `.env.local`, or run `npm run setup`. Add your own Supabase public settings:
 
-## Implemented
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR-SUPABASE-PUBLISHABLE-OR-ANON-KEY
+```
 
-- Responsive lavender/white fintech workspace; landing and authentication screens.
-- Dashboard, assistant, invoice list/upload/details/edit, supplier list and verified recipients.
-- PDF **text-layer** extraction; PNG/JPEG/WebP **English OCR** through Tesseract; text paste/import. Optional structured extraction from an OpenAI-compatible model.
-- Duplicate invoice checks, changed-wallet comparison, invalid fields, risky instructions and URL heuristics.
-- Explainable deterministic 0–100 transaction risk; per-payment/daily limits, repeated attempts, recipient/asset/chain changes and duplicate-payment protection in the demo flow.
-- Security dashboard, wallet analysis, transaction analyzer, invoice fraud checker, link protection, evidence alerts and local audit history.
-- Payment form, route screen, approval, manual simulated progress, settled/failed/refunded outcomes and branded simulated PDF receipts.
-- Actual official 1Click token discovery, dry quote requests and read-only status lookup using server-side optional JWT.
-- Official NEAR Connect wallet connection with a read-only live native NEAR balance card, final-block provenance and refresh/error states. Mainnet signing remains disabled; the separate testnet lab permits one reviewed native Transfer action through the user’s wallet.
-- Analytics, CSV/JSON exports, profile/security settings, Supabase email/password sign-in and password recovery UI.
-- PostgreSQL foundation with tenant RLS, server-write-only financial records, audit triggers and unique active invoice payments.
-- Unit/security/API integration tests, browser journey specifications, production build and container definition.
+Use a publishable or legacy anon key, never a secret/service-role key. `.env.local` is ignored by Git. Restart after changing settings; rebuild if running production locally.
 
-## Deliberate limits
+In your Supabase SQL Editor, run these migrations in order:
 
-- No committed mainnet quotes, funded mainnet swaps, automatic mainnet settlement reconciliation or real financial receipts. These need an audited transaction coordinator, signed quote verification, atomic reservations, idempotency and configured production access.
-- Browser-local demo records and audit history are editable, not a secure ledger. Real business persistence is not wired to the supplied SQL schema.
-- No external malicious-address or phishing feed is configured. NEAR wallet analysis optionally queries account existence through public RPC; it does not analyze historical flows. Other chain history is unavailable. A valid/new wallet is not thereby safe or malicious.
-- Scanned PDFs without a text layer must be uploaded as images or entered manually. OCR language defaults to English. QR image decoding, QR destination comparison, document signature verification and redirect inspection are not implemented.
-- Security rules are code-based, not AI-created evidence. Optional AI extraction requires credentials; the assistant is an honest structured local parser.
-- Demo spending limits count selected assets at 1:1 USD for demonstration only. Real asset valuation is not implemented.
-- Rate limiting is per-process and assumes a trusted deployment proxy; use an edge/shared limiter before production exposure.
-- Browser end-to-end tests, SQL policies and container runtime require verification in a suitably configured environment. No public deployment, public GitHub repository or recorded video is claimed.
+1. `supabase/account-profiles.sql`
+2. `supabase/supplier-marketplace.sql`
+3. `supabase/workspace-sync.sql`
+4. `supabase/demo-accounts-feedback.sql`
+5. `supabase/final-payments.sql` — **LAST**
 
-## Checks
+The final migration preserves existing balances, grant status and history. Do not rerun only an older ledger migration afterward. `supabase/schema.sql` is an unfinished production foundation, not a substitute for these prototype migrations.
+
+Private demo documents use row-level security and revision checks. They remain user-editable simulations. DUSD balance changes use restricted database functions with atomic journal entries and participant-only receipt access.
+
+### Confirmation and password recovery
+
+Enable email/password authentication and confirmation in Supabase. Set **Site URL** to your actual website origin and allow its `/auth` and `/auth/reset` redirect URLs. For the hosted prototype:
+
+```text
+https://afripay-ai.vercel.app/auth
+https://afripay-ai.vercel.app/auth/reset
+```
+
+For a separate local installation also allow those paths on its exact local origin.
+
+Public registration needs configured custom SMTP; Supabase's default sender has recipient restrictions and low limits. The founder reports successful hosted signup/recovery after configuring Gmail SMTP and branded templates on November 9, 2026. Gmail still has quotas and delivery limitations; this is not a delivery guarantee.
+
+For a small Gmail-based test, configure SMTP in **Supabase**, using `smtp.gmail.com`, port `465`, the full Gmail username and a Google **App Password** generated after enabling 2-Step Verification. Use that same address as the sender. Never use the normal Gmail password. Keep SMTP credentials only in Supabase, never in this repository or frontend environment variables. Templates in `supabase/email-templates/` are installed separately through Supabase; preserve `{{ .ConfirmationURL }}`.
+
+### Optional AI and Intents settings
+
+- `AI_BASE_URL`, `AI_API_KEY`, `AI_MODEL`: trusted OpenAI-compatible structured model provider, server-side only. Model extraction/proposals require verified account sessions and explicit opt-in. Default assistance is labeled local rule-based parsing. Live inference has not been independently verified for this release.
+- `ONECLICK_API_TOKEN`: optional server-side 1Click partner token. Provider access depends on the environment. Token discovery returned HTTP 403 in the development environment; no quote or settlement was fabricated.
+
+No seed phrases or private keys are stored. The model cannot sign transactions or authorize payments.
+
+## Deploy and update
+
+The prototype is hosted on Vercel with Supabase. Import the repository, keep Next.js and root directory `./`, and configure the two public Supabase variables above. Install the database migrations and SMTP separately. Update Supabase redirects to your deployed HTTPS origin.
+
+To update an existing deployment, commit the intended files and push to its connected branch; Vercel builds that commit. Check deployment status and verify hosted sign-in, recovery, invoices and two-account activity afterward. Never commit `.env.local`, SMTP credentials or model keys. See [deployment instructions](docs/DEPLOYMENT.md).
+
+## Verification and limitations
+
+Version 0.6 release checks passed:
+
+- **234 automated unit/API/security/embedded PostgreSQL tests**.
+- **74 desktop/mobile Chromium browser journeys**.
+- TypeScript, optimized production build and **40-route** production startup smoke.
+- Downloaded PDF rendering and visual inspection.
+
+Database tests execute actual migrations in embedded PostgreSQL. Account browser tests use the actual SDK against a mock service, not real inboxes. Mobile viewport emulation is not physical Safari or a wallet-app test. Prior read-only API checks observed a real testnet account and an existing public mainnet transaction; AFRIPAY did not initiate that transaction.
+
+Separately, the founder reported successful hosted account, two-account transfer/payment, matching balance/receipt, suspicious-invoice and recovery tests. These are human-reported checks, not automated proof of every production path. The README-only update does not rerun the application's release suite. See [verification details](docs/VERIFICATION.md).
+
+Remaining limits:
+
+- Funded mainnet Intents execution, real financial receipts and automatic mainnet invoice reconciliation are unfinished.
+- External malicious-address/phishing feeds and full historical flow analysis are not configured. Low heuristic risk is not a safety guarantee; a new wallet alone is not treated as a scam.
+- Scanned PDFs without a text layer need image upload or manual entry. English OCR can make mistakes. QR decoding, document signature verification and redirect inspection are not implemented; untrusted URLs are not automatically opened.
+- Demo documents/audits are editable, not production financial audit logs. DUSD has no redemption or cash value. No real FX valuation is provided.
+- Rate limiting is per-process; a shared/edge limiter and broader operational review are needed for production financial use.
+- Gmail and Supabase authentication limits still apply. Hosting does not automatically install SQL, configure SMTP or ensure email delivery.
+- No wallet-authorized mainnet transfer, recorded demo video, X demo post or hackathon submission is claimed here.
+
+### Reproduce checks
 
 ```sh
 npm run typecheck
@@ -65,116 +172,59 @@ npm run build
 npm run test:smoke
 ```
 
-For browser journeys, start the app, install Playwright's browsers in your own environment (`npx playwright install chromium`), then run `npm run test:e2e`. For a hosted deployment set `E2E_BASE_URL` to its URL. The v0.3 release runs these journeys in Chromium at desktop and mobile viewport sizes; these tests do not replace a real wallet or email-provider test.
+Smoke starts a production server itself. For browser checks, run the app in another terminal, install Chromium and run:
 
-## Project map
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
 
-- `app/api/` — validated, bounded, same-origin server integrations. No payment execution endpoint exists.
-- `lib/security.ts` — deterministic rules and source classifications.
-- `lib/amount.ts` — precise decimal-to-atomic conversion.
-- `lib/invoice.ts`, `lib/assistant.ts` — extraction/parser fallbacks.
-- `components/workspace.tsx`, `app/globals.css` — responsive application and demo state.
-- `supabase/schema.sql` — access-controlled database foundation.
-- `tests/` — security, API and browser journey tests.
-- [Architecture](docs/ARCHITECTURE.md), [checklist](docs/CHECKLIST.md), [deployment](docs/DEPLOYMENT.md), [submission kit](docs/HACKATHON.md).
+Use `E2E_BASE_URL` for a dedicated test deployment. Browser fixtures mock account/network responses; these are not funded-payment tests.
 
-## Official sources
+## Architecture and project files
 
-Research checked 2026-11-04, with snapshots under `docs/research`:
+Next.js App Router, React, TypeScript and Tailwind provide the UI/server routes. Supabase provides Auth and PostgreSQL access controls. Deterministic security rules produce evidence; optional AI summarizes/extracts structured data. NEAR Connect handles explicit wallet connection/authorization; fixed server integrations query RPC and official 1Click APIs.
+
+```mermaid
+flowchart LR
+  User[Business user] --> App[Next.js workspace]
+  App --> Auth[Supabase Auth]
+  App --> DB[Private demo documents and DUSD ledger]
+  App --> Risk[Deterministic evidence and policy checks]
+  App --> API[Validated server routes]
+  API --> AI[Optional structured AI provider]
+  API --> Near[NEAR RPC: read-only observations]
+  API --> Intents[1Click: dry quotes and status]
+  App --> Wallet[Explicit wallet authorization]
+  Wallet --> Testnet[Native NEAR testnet transfer]
+```
+
+- `components/`, `hooks/`, `app/globals.css`: workspace, shared ledger screens and responsive design.
+- `lib/security.ts`, `lib/invoice.ts`, `lib/assistant.ts`: evidence rules and structured extraction/proposals.
+- `app/api/`: bounded integrations; no mainnet funding coordinator.
+- `supabase/`: account, supplier, workspace, credit and feedback migrations.
+- `tests/`: unit, API, security, database and browser checks.
+- `samples/`: invoice examples and a clearly labeled demo credit receipt.
+
+[Architecture](docs/ARCHITECTURE.md) · [Security model](docs/SECURITY.md) · [Version 0.6 guide](docs/RELEASE-0.6.md) · [Checklist](docs/CHECKLIST.md) · [Submission preparation](docs/HACKATHON.md)
+
+![AFRIPAY desktop dashboard, automated test fixture](docs/screenshots/dashboard-desktop.png)
+
+![Demo credit receipt using fictional test participants](docs/screenshots/demo-credit-receipt-pdf.png)
+
+## Hackathon disclosure, sources and license
+
+Built from an empty workspace during the November 2026 development window with AI assistance. No pre-existing product or own baseline code was imported. No separate competing project is declared in this workspace. Track choices and final submission remain subject to founder confirmation and current rules.
+
+Uses Next.js, React, Tailwind, Lucide, Supabase JS, NEAR Connect, Tesseract.js, PDF.js, pdf-lib/fontkit, Zod, Vitest, Playwright and PGlite. Exact versions are in `package-lock.json`. Source is MIT licensed; see [LICENSE](LICENSE). Bundled PDF.js worker and fonts retain their notices/licenses in `public/`.
+
+Official integration research was checked November 4, 2026, with records under `docs/research`. Re-read the live hackathon rules before submitting:
 
 - https://nearhackathon.com/HACKATHON.md
-- https://docs.near.org/ and https://docs.near.org/tools/near-connect.md
+- https://docs.near.org/
+- https://docs.near.org/tools/near-connect.md
 - https://docs.near-intents.org/integration/distribution-channels/1click-api/quickstart/making-a-request.md
 - https://docs.near-intents.org/api-reference/oneclick/request-a-swap-quote.md
 - https://docs.near-intents.org/api-reference/oneclick/check-swap-execution-status.md
 
-1Click uses mainnet; no Intents testnet exists. The dry → human review → committed → wallet authorization → verified settlement lifecycle is documented, and this release stops at dry quotes for mainnet Intents. Native NEAR testnet transfers are a separate implementation and never mark demo invoices paid.
-
-## Hackathon disclosure and license
-
-Built from an empty workspace during the November 2026 development window with AI assistance. No pre-existing product or own baseline code was imported. Libraries: Next.js, React, Tailwind, Lucide, Supabase JS, NEAR Connect, Tesseract.js, PDF.js, Zod, Vitest and Playwright. See `package-lock.json` for exact dependency versions and upstream licenses. No separate competing project is declared in this workspace. MIT license; see LICENSE. The copied PDF.js browser worker is Apache-2.0 licensed; see `public/PDFJS-LICENSE`.
-
-## Observed verification
-
-On 2026-11-04: **41 tests passed**, typecheck passed, production build passed, and an actual production server passed HTTP smoke checks for **22 page routes** plus configuration/extraction APIs. Production dependency audit reported zero known vulnerabilities. See [the verification record](docs/VERIFICATION.md) for browser, database and live API limits.
-
-## Receipt design update
-
-Payment receipts now download as branded PDFs with full wallet/reference fields and a visible simulation notice. See [Windows update instructions](docs/RECEIPT-UPDATE.md). PDF generation happens locally in the browser using bundled licensed fonts, without an external document service.
-
-## Wallet balance update
-
-A connected NEAR wallet now replaces the illustrative USD balance with its native NEAR account balance. Other tokens and USD valuation are not included. Payment activity remains simulated. See [wallet balance update instructions](docs/WALLET-BALANCE-UPDATE.md). Live RPC accessibility from the target PC still needs verification.
-
-## Demo / Live wallet switch and registration
-
-The top bar separates Demo, Live wallet (read-only mainnet), and the native NEAR testnet lab. The live view never displays seeded business records or simulated payments. Create account and Sign in are visible; Supabase credentials and public deployment are still required for actual visitor registration. See [the founder’s next steps](docs/START-HERE-NEXT-STEPS.md).
-
-## Accounts, suppliers and receiving update
-
-Signup now has a persistent email-confirmation screen and resend action. Pay supports custom demo recipients; Receive displays the actual connected native NEAR account. Demo storage is separated by signed-in user. Supplier applications and an admin review panel use authenticated Supabase tables/RLS after applying `supabase/supplier-marketplace.sql`. Admins are appointed by the project operator, never ordinary signup. See [setup and two-account test instructions](docs/ACCOUNTS-SUPPLIERS-ADMIN.md). Mainnet funded transfers, automatic mainnet receiving reconciliation and database-backed invoice/payment persistence remain unfinished.
-
-## Authentication fix
-
-Duplicate/obfuscated signup responses are no longer presented as guaranteed new-account confirmation. Password recovery has a dedicated email request, a verified-session gate, confirmation entry and a new-password login check. See [the Supabase settings and recovery test guide](docs/AUTH-FIX.md). Your actual project’s redirect configuration and inbox flow still require verification.
-
-## Branded authentication emails
-
-Supabase-ready AFRIPAY confirmation and reset templates are in `supabase/email-templates/`. Paste them into Supabase Authentication email settings; they are not installed by an app deployment. The verification links retain the provider’s `ConfirmationURL`. Custom SMTP is needed for branded template editing; an existing Gmail account with an App Password can work for small tests without buying a domain. A branded-domain sender address needs verification of that owned domain. See `supabase/email-templates/README.md`.
-
-## Version 0.2.0: private onboarding and native testnet lab
-
-Guest identities are explicitly Demo user / Sample business. Signup collects a name and Customer/Supplier preference; account-owned business/country profiles are saved under RLS after installing `supabase/account-profiles.sql`. The `wallet/setup` screen offers a no-wallet simulation, read-only mainnet connection and the native testnet lab. The lab uses only `.testnet` accounts, at most 1 test NEAR per transfer, explicit review/wallet approval and matching final RPC execution proof. It never executes a mainnet swap. See [complete setup and two-wallet instructions](docs/RELEASE-0.2.md).
-
-
-## Version 0.3.0: private demo backup and guarded model proposals
-
-Run `supabase/workspace-sync.sql` in your existing Supabase project's SQL Editor. Signed-in users' simulation invoices, suppliers, payment history, security reports and policies then save to an owner-only document. Saves serialize and use database revision checks; a stale tab cannot overwrite a newer document. Conflicts display a warning, with unsaved export and explicit reload controls. Guests keep local demo storage. Existing data is not deleted. First cloud initialization imports only that signed-in account's local simulation, never another account's or the guest's records.
-
-These documents remain **user-editable simulations**, not a production financial ledger or immutable audit log. Mainnet payment coordination still requires durable server-side reservations and verified settlement. An unavailable database is labeled as unsaved; it never becomes a fabricated successful payment.
-
-The assistant offers local parsing (no model) or a configured OpenAI-compatible structured model. Model calls require a Supabase-verified session. `AI_API_KEY`, `AI_BASE_URL` and `AI_MODEL` stay server-side. Only explicitly mentioned numeric amounts, supported asset symbols and recipient addresses are accepted. Invented fields, extra authority and malformed outputs fail closed. The model has no wallet tools and its prose cannot authorize payments. Invoice AI extraction uses the same session requirement and rejects invented wallet addresses. Actual inference needs your credentials and has not been exercised against a live model here.
-
-Invoice instructions that attempt to override software rules now generate explicit heuristic evidence and block the demo payment. Decimal formatting cannot bypass duplicate payment checks. See [upgrade steps](docs/RELEASE-0.3.md), [verification](docs/VERIFICATION.md) and [the path to a stronger entry](docs/ROAD-TO-8.md).
-
-
-Latest verification (v0.3.0): **177 automated tests and 28 desktop/mobile Chromium browser journeys passed**, plus TypeScript, the production build and 30-page startup smoke checks. Browser checks include actual sample PDF upload and demo receipt download. [Actual dashboard screenshots](docs/screenshots/) are included. Hosted Supabase synchronization, live model inference, real emails and wallet-authorized transfers still need target-account verification.
-
-
-## Version 0.4.0: repair account setup and restrict the admin console
-
-`npm run setup` creates/repairs `.env.local` using your Supabase project URL and publishable key, preserves unrelated settings and backs up an existing file. The account bootstrap reads validated public settings from the running server, so a stale frontend build cannot silently disable configured auth. Missing setup has an actionable local repair panel. The public config route never returns secret/service-role, SMTP or model keys.
-
-Guests see **Sign in to save online** and an explanation that wallet connection is separate from account login. Normal customers/suppliers have no admin navigation; appointed administrators see **Admin console**, a separate layout. Direct navigation is denied to ordinary accounts and supplier review RPCs retain their database administrator checks. Existing invoice, demo payment, security, profile, supplier, AI and testnet features remain.
-
-See [Windows update steps](docs/RELEASE-0.4.md), [Resend SMTP requirements](docs/RESEND-SUPABASE.md) and [current deployment steps](docs/DEPLOYMENT.md). Resend public delivery needs a verified sending domain; a free Resend test sender cannot mail all users. SMTP, hosting, live inference, wallet transfers and competition submission are not automatically enabled by installing this update.
-
-
-Latest v0.4 verification: **188 automated tests, 50 desktop/mobile Chromium browser journeys, TypeScript, production build and 30-page startup smoke passed**. Account browser flows use the actual SDK with a mock service, not real email delivery. A read-only public check accepted the founder-provided Supabase settings and reported email signup enabled. Live Intents token discovery still returned HTTP 403 in this environment. See the verification record for limits.
-
-
-## Version 0.5.0: clean starts, sign-in gates and account transfers
-
-New workspaces start empty; sample invoice buttons load examples only when chosen. Existing saved data is preserved. The dashboard no longer invents a starting balance. Its DUSD balance comes from a separate account-owned test-credit ledger, initially zero. Signed-in users may explicitly claim 1,000 valueless DUSD credits once, share a receive code and transfer credits to another registered account. A restricted database RPC atomically debits/credits, enforces available balance and limits, records balanced entries and handles idempotent retries. DUSD is **not NEAR, USDC or real money**. Invoice workflow previews do not move DUSD; funded Intents settlement remains unfinished.
-
-Guests may review invoices and use read-only NEAR observations, but demo payment approval and built-in downloads require sign-in. An explicit guest invoice continuation survives sign-in and reopens with recipient verification cleared. Other accounts' records are not imported.
-
-`/near/checks` reads final wallet state or a transaction by hash/sender on an explicit mainnet/testnet selection. It requests receipt-capable RPC status, requires matching complete final execution for confirmation, and keeps unavailable data unknown. No external scam intelligence or full movement history is claimed. It never signs, sends or marks a real invoice paid.
-
-The footer credits **Yabsera Teklemariyam**, links **yabsiratekle@gmail.com**, and exposes Privacy, Terms & rules, Contact and Ideas & feedback. Publication stays unset until actual deployment. Feedback requires sign-in to submit and is private to its author/authorized admins. An admin feedback panel is included.
-
-Install `supabase/demo-accounts-feedback.sql` after the earlier migrations. See [Windows upgrade and two-account walkthrough](docs/RELEASE-0.5.md). All prior account/profile, supplier, security, AI guardrail and native testnet features remain. Actual wallets, inbox delivery, hosted Supabase setup, live inference, hosting and the final submission still need the documented verification/approvals.
-
-
-Latest v0.5 verification: **212 automated tests, 64 Chromium desktop/mobile journeys, production build and 36-page startup smoke passed**. Real read-only API queries returned a testnet wallet balance and confirmed an already-existing public mainnet transaction. No transfer was sent by AFRIPAY in those checks. Browser account flows use a mock service, while embedded PostgreSQL executes the actual ledger/feedback policies. Founder-hosted two-account testing, emails, live model calls and actual wallet sends remain separate checks.
-
-
-## Version 0.6.0: Pay, Transfer, Receive and shared receipts
-
-Navigation now separates approved supplier **Pay**, friend **Transfer**, **Receive** and unified **Transactions**. Demo mode is selected at the top; DUSD remains explicit on balances and receipts. All recorded credit screens and the dashboard use the same validated database summary, whose balance/totals/history are read from one snapshot. Legacy invoice previews remain available via Open invoice preview and are separately labeled; they never affect DUSD totals.
-
-Participants may choose a receipt display name in Receive. A transfer snapshots both labels, and both participants obtain the same canonical receipt/PDF. Their private emails/profiles are not returned. Receipt access is limited to sender/receiver, including denial to nonparticipant administrators. Old history and balances are preserved with stable fallback labels.
-
-Supplier Pay derives the recipient from a currently approved supplier application, rather than guessing ownership of a wallet. Optional invoice payment binds the saved workspace revision, invoice identity/number, verified recipient, business, chain, wallet and amount; enforces policies/duplicate/security checks; and updates only the linked invoice after successful atomic credit recording. This remains DUSD simulation, not funded NEAR Intents execution. Uncertain network responses preserve the approval ID and freeze details for safe retries.
-
-Run the additive `supabase/final-payments.sql` LAST, after the earlier migrations. See [the final update walkthrough](docs/RELEASE-0.6.md). Mainnet Intents settlement, live AI/inbox/wallet verification, public repository, hosting and submission remain the documented external tasks.
+README updated November 9, 2026. Repository and live deployment are public; no final competition submission has been made by this update.
