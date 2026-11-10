@@ -1,0 +1,10 @@
+import {it,expect,beforeAll,afterAll} from 'vitest';
+import {PGlite} from '@electric-sql/pglite';
+import {readFile} from 'node:fs/promises';
+let db:PGlite;
+beforeAll(async()=>{db=new PGlite();await db.exec('create role anon;create role authenticated;create role service_role bypassrls;');await db.exec(await readFile('supabase/testnet-activity.sql','utf8'));},30000);
+afterAll(async()=>db?.close());
+const hash='6zgh2u9DqHHiXzdy9ouTP7oGky2T4nugbhqsK7wQHnZS';
+it('accepts one verified public transfer and makes duplicate imports idempotent',async()=>{await db.exec(`set role service_role;insert into testnet_transfers values('${hash}','sender.testnet','receiver.testnet','10000000000000000000000',100,now(),now(),'fixture') on conflict(hash) do nothing;insert into testnet_transfers values('${hash}','sender.testnet','receiver.testnet','10000000000000000000000',100,now(),now(),'fixture') on conflict(hash) do nothing;`);expect((await db.query('select * from testnet_transfers')).rows).toHaveLength(1);await db.exec('reset role');});
+it('denies direct client reads and writes',async()=>{for(const role of ['anon','authenticated']){await db.exec('set role '+role);try{await expect(db.query('select * from testnet_transfers')).rejects.toThrow(/permission denied/);await expect(db.exec('delete from testnet_transfers')).rejects.toThrow(/permission denied/);}finally{await db.exec('reset role');}}});
+it('cannot hide private invoice fields in the shared table',async()=>{const columns=(await db.query<{column_name:string}>("select column_name from information_schema.columns where table_name='testnet_transfers'")).rows.map(x=>x.column_name);expect(columns).not.toContain('description');expect(columns).not.toContain('user_id');expect(columns).not.toContain('invoice_id');});

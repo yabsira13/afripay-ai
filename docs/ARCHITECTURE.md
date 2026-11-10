@@ -116,3 +116,13 @@ The report API verifies Auth, paginates only the user's orders through a creatio
 `testnet_invoices` is a separate owner-read/service-write table. `/api/testnet/invoices` verifies the Supabase user and scopes every row read/update to that user. Creation preflights the recipient's testnet account and records the final block floor. Authorization conditionally changes OPEN to AUTHORIZING once, preflights testnet spendable balance and returns one native testnet Transfer. The browser reconstructs that exact transfer and requests wallet approval; the server never signs.
 
 A unique transaction hash attaches once. Verification checks final successful transaction and recipient receipt evidence plus exact source, destination and atomic value, then resolves the execution block by hash and requires its height and timestamp to follow invoice creation. Only then can the service write PAID and its JSON receipt evidence. Unknown/pending stays unpaid. A cancelled/uncertain wallet step stays locked for manual hash recovery. No testnet step writes the DUSD ledger or mainnet payment tables.
+
+## 0.9.2 testnet navigation and public activity
+
+Testnet routes now render distinct overview, invoice, pay, transfer, receive, transaction and analytics views. A remembered address is used only for public lookups; wallet reconnection and explicit approval are still required before signing.
+
+`/api/testnet/activity` requires a verified Supabase session and accepts only named testnet accounts. The POST path retrieves native transfer execution from fixed testnet providers, checks exact signer/hash/actions plus optional reviewed destination/amount, requires FINAL successful receipts, resolves its execution block and validates block hash/height/time. Only those public facts enter service-written `testnet_transfers`, keyed by hash with insert-on-conflict-do-nothing. Pending, failed, unrelated or contract-call execution cannot become a confirmed shared row.
+
+GET reads the latest 100 matching public facts for a wallet, never private invoice rows. No wallet ownership or email identity is inferred from a public address. Totals use integer atomic amounts and cover only the tracked records. Saved invoice payment verification publishes matching public facts after PAID; a failed shared-history write leaves PAID intact and offers hash sync, never automatic resend. Existing paid invoices and browser transfers can be verified/imported without another transfer.
+
+Invoice PDFs and final-payment receipt PDFs are generated locally with embedded bundled fonts. Private invoice descriptions stay in owner-scoped records/PDFs; receiving wallets see public chain payment receipts.

@@ -231,3 +231,16 @@ No email, mainnet transaction, repository publication, deployment or hackathon s
 - [ ] Founder installs additive testnet SQL and deploys 0.9
 - [ ] Founder signs the first actual testnet invoice payment and records its explorer URL
 - [ ] Independently demonstrate a funded mainnet Intents settlement; no claim of gas sponsorship
+
+## Version 0.9.2 activity and receipt fixes
+
+- [x] Distinct testnet overview, invoice, pay, transfer, receive, transaction and analytics views
+- [x] Server-verified public native transfer history shared with sender/receiver views
+- [x] Exact integer sent/received totals for tracked records; manual old-hash import without resend
+- [x] Inline verification progress, checked time and explicit failure feedback
+- [x] Downloadable PDF invoices and final-payment receipts with embedded fonts and explorer link
+- [x] 338 unit/API/database checks and 114 desktop/mobile browser checks passed
+- [x] Founder supplied paid-invoice screenshot; corresponding 0.01 native testnet transfer independently confirmed by public RPC
+- [ ] Founder installs `testnet-activity.sql`, deploys 0.9.2 and syncs existing payment to shared activity
+- [ ] Hosted sender/receiver activity and final PDF download acceptance check
+- [ ] Funded mainnet Intents end-to-end settlement remains unproven

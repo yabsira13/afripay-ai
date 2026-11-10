@@ -1,5 +1,7 @@
 # AFRIPAY AI — detailed project guide
 
+Historical 0.9 guide. For current testnet pages, sent/received activity, PDF receipts and observed signed-payment evidence, see [0.9.2](RELEASE-0.9.2.md).
+
 **Intelligent Payments. Borderless Business.**
 
 AFRIPAY AI helps African businesses review supplier invoices, detect suspicious payment instructions and approve payments with evidence in view. Built for **NEAR HACKATHON 2026**, primarily Real-World Money, with security features relevant to AI Security & Defense.

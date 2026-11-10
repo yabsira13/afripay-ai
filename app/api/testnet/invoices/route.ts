@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import {api,json,APIError} from '@/lib/server';
+import {saveTestnetTransfer,checkTestnetTransfer} from '@/lib/testnet-activity-server';
 import {liveUser} from '@/lib/live-server';
 import {testnetRpc} from '@/lib/testnet-rpc';
 import {testnetInvoiceDraft,verifyTestnetInvoice} from '@/lib/testnet-invoices';
@@ -41,7 +42,7 @@ export async function POST(request:Request){return api(request,async()=>{
   return {invoice:updated.data};
  }
  if(input.action==='verify'){
-  if(row.state==='PAID')return {invoice:row};
+  if(row.state==='PAID'){try{const observed=await checkTestnetTransfer({hash:row.funding_hash,sender:row.sender,receiver:row.receiver,amount:row.amount});if(!observed.record)return {invoice:row,activitySyncIssue:'Saved paid invoice retained, but a fresh activity check is pending. Retry sync later; do not send again.'};await saveTestnetTransfer(db,observed.record);return {invoice:row,reason:'Existing payment verified and synced to sender and receiver activity.'};}catch(e){return {invoice:row,activitySyncIssue:(e as Error).message};}}
   if(!row.funding_hash||row.state!=='SUBMITTED')throw new APIError('Attach the submitted transaction hash first.',409);
   const {result,provider}=await testnetRpc('tx',{tx_hash:row.funding_hash,sender_account_id:row.sender,wait_until:'FINAL'});
   if(!result)return {invoice:row,reason:'Final execution is not available yet. Invoice remains unpaid.'};
@@ -56,7 +57,8 @@ export async function POST(request:Request){return api(request,async()=>{
   const proof={network:'testnet',hash:row.funding_hash,sender:row.sender,receiver:row.receiver,amount:row.amount,blockHeight:height,provider,checkedAt:new Date().toISOString(),reason:outcome.reason};
   const updated=await db.from('testnet_invoices').update({state:outcome.status==='confirmed'?'PAID':'FAILED',proof,...(outcome.status==='confirmed'?{paid_at:new Date().toISOString()}:{})}).eq('id',row.id).eq('user_id',user).eq('state','SUBMITTED').eq('funding_hash',row.funding_hash).select().single();
   if(updated.error)throw new APIError('Verified result could not be saved. Refresh; do not resend.',503);
-  return {invoice:updated.data,reason:outcome.reason};
+  let activitySyncIssue:string|undefined;if(outcome.status==='confirmed'){try{await saveTestnetTransfer(db,{hash:row.funding_hash,sender:row.sender,receiver:row.receiver,amount_atomic:prepareTestnetTransfer(row.sender,row.receiver,row.amount).atomicAmount,block_height:height,block_timestamp:new Date(Number(BigInt(timestamp)/1000000n)).toISOString(),verified_at:proof.checkedAt,provider});}catch(e){activitySyncIssue=(e as Error).message;}}
+  return {invoice:updated.data,reason:outcome.reason,activitySyncIssue};
  }
  throw new APIError('Unknown invoice action.');
 });}

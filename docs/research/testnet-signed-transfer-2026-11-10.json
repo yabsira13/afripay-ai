@@ -1,0 +1,279 @@
+{
+  "note": "User supplied the transaction in a paid-invoice screenshot. Read-only public RPC observed its final execution; AFRIPAY assistant did not sign or send it. Private database paid state is user-reported, not independently queried.",
+  "observedAt": "2026-11-10T12:51:56.651786+00:00",
+  "rpcResponse": {
+    "jsonrpc": "2.0",
+    "result": {
+      "final_execution_status": "FINAL",
+      "receipts": [
+        {
+          "predecessor_id": "alephai.testnet",
+          "priority": 0,
+          "receipt": {
+            "Action": {
+              "actions": [
+                {
+                  "Transfer": {
+                    "deposit": "10000000000000000000000"
+                  }
+                }
+              ],
+              "gas_price": "1000000000",
+              "input_data_ids": [],
+              "is_promise_yield": false,
+              "output_data_receivers": [],
+              "signer_id": "alephai.testnet",
+              "signer_public_key": "ed25519:FH8HFAHHj9tJHpGNDWnXtnd91dp26XeLUE8sukKbQKap"
+            }
+          },
+          "receipt_id": "4F8U17seuoeLmPwAqkemo3ioQF8eXGib6NEyK8qXNSyp",
+          "receiver_id": "afripayai.testnet"
+        },
+        {
+          "predecessor_id": "system",
+          "priority": 0,
+          "receipt": {
+            "Action": {
+              "actions": [
+                {
+                  "Transfer": {
+                    "deposit": "200864306250000000000"
+                  }
+                }
+              ],
+              "gas_price": "0",
+              "input_data_ids": [],
+              "is_promise_yield": false,
+              "output_data_receivers": [],
+              "signer_id": "alephai.testnet",
+              "signer_public_key": "ed25519:FH8HFAHHj9tJHpGNDWnXtnd91dp26XeLUE8sukKbQKap"
+            }
+          },
+          "receipt_id": "Eq4V29AwYvHHcjtsNniXf7UGiDK9w9KSdm7NGhQLftZn",
+          "receiver_id": "alephai.testnet"
+        }
+      ],
+      "receipts_outcome": [
+        {
+          "block_hash": "61TmKDoCWSorUuJJVBKa5HnWddw7o5szfvr4p5Mi8YTo",
+          "id": "4F8U17seuoeLmPwAqkemo3ioQF8eXGib6NEyK8qXNSyp",
+          "outcome": {
+            "executor_id": "afripayai.testnet",
+            "gas_burnt": 223182562500,
+            "logs": [],
+            "metadata": {
+              "contracts": [
+                null
+              ],
+              "gas_profile": [],
+              "version": 4
+            },
+            "receipt_ids": [
+              "Eq4V29AwYvHHcjtsNniXf7UGiDK9w9KSdm7NGhQLftZn"
+            ],
+            "status": {
+              "SuccessValue": ""
+            },
+            "tokens_burnt": "22318256250000000000"
+          },
+          "proof": [
+            {
+              "direction": "Left",
+              "hash": "HsLWRrvYYgPRF7eQGH2mEXwuRtrwSmGiPixwWUKVUyps"
+            }
+          ]
+        },
+        {
+          "block_hash": "8wHoxpkrd8wnRWHcyUPTUxXBr2f1ZmZtC5yEnvP4kbM8",
+          "id": "Eq4V29AwYvHHcjtsNniXf7UGiDK9w9KSdm7NGhQLftZn",
+          "outcome": {
+            "executor_id": "alephai.testnet",
+            "gas_burnt": 223182562500,
+            "logs": [],
+            "metadata": {
+              "contracts": [
+                null
+              ],
+              "gas_profile": [],
+              "version": 4
+            },
+            "receipt_ids": [],
+            "status": {
+              "SuccessValue": ""
+            },
+            "tokens_burnt": "0"
+          },
+          "proof": [
+            {
+              "direction": "Left",
+              "hash": "42412X7cNDoKuiSuUaJmfpVSesMFRci4MBFYEDJbzExa"
+            },
+            {
+              "direction": "Left",
+              "hash": "DUAXRu7sjwypQ1CEc1BeSBdXi7XFqa9KX7Y7NUVL6Q7"
+            }
+          ]
+        }
+      ],
+      "status": {
+        "SuccessValue": ""
+      },
+      "transaction": {
+        "actions": [
+          {
+            "Transfer": {
+              "deposit": "10000000000000000000000"
+            }
+          }
+        ],
+        "hash": "55jZE7gnpLRzhUySa2NtqxMRp6PuxfqFcWhzmECiHWGa",
+        "nonce": 277067405000001,
+        "priority_fee": 0,
+        "public_key": "ed25519:FH8HFAHHj9tJHpGNDWnXtnd91dp26XeLUE8sukKbQKap",
+        "receiver_id": "afripayai.testnet",
+        "signature": "ed25519:53Rd4qVG6WGzATPwQ4aiW1EvmVJa7WmwUEUzox1b3SiXzPcgbWw6peTdKgYLpd5xqbn1KEK8fRXJptbsqUGjWhPj",
+        "signer_id": "alephai.testnet"
+      },
+      "transaction_outcome": {
+        "block_hash": "Ayv2eeHV2duyJ2DRg33yYLAyBcPC9gTLkAKcc7K6Lxi5",
+        "id": "55jZE7gnpLRzhUySa2NtqxMRp6PuxfqFcWhzmECiHWGa",
+        "outcome": {
+          "executor_id": "alephai.testnet",
+          "gas_burnt": 223182562500,
+          "logs": [],
+          "metadata": {
+            "gas_profile": null,
+            "version": 1
+          },
+          "receipt_ids": [
+            "4F8U17seuoeLmPwAqkemo3ioQF8eXGib6NEyK8qXNSyp"
+          ],
+          "status": {
+            "SuccessReceiptId": "4F8U17seuoeLmPwAqkemo3ioQF8eXGib6NEyK8qXNSyp"
+          },
+          "tokens_burnt": "22318256250000000000"
+        },
+        "proof": [
+          {
+            "direction": "Right",
+            "hash": "5MKYQRPrcsr64VKbW4q8UNyTWpUDrXY9VCvFBVpTYLwo"
+          }
+        ]
+      }
+    },
+    "id": "afripay-readonly"
+  },
+  "blockHeader": {
+    "approvals": [
+      "ed25519:MfM7cJ84Hm2uGJiN1oCjWK63W9Ps8LUj7E3wqHrnfJJpxTbyrvk85eUjJxdst5aPgx2xMka9DWkMHRDvZeKjRrz",
+      "ed25519:2N2SmgXF2V9SFPj9k7jAgo1RxcEUgXmPNTJXFynqhtg8VZqyFht3Hot1CBTGP6pzviNpGkTWKweCgBg2UBB29g5U",
+      "ed25519:4eKHPSmJbFj3ZimeypdQfKqjwpBmHwK4nGvNnJRo8ADBgrEeUohKsiaeE96Ggi16eNf8TimJPgd3aUiVb4GK2Cqq",
+      "ed25519:48DBS4gePKKyJvko3htPnxC2YsnPcxVfzagbSESvrvV4mvpqQCjJAbh2n59tD8YXUVvw3Jp8czbLKvNmSVXHA593",
+      null,
+      "ed25519:2n9AVAtA9pzaVSMnCGV3QDESg9qDRs54sLWbetwcqtsSqghku8qGaXLoKooVWokuVhDuCe6wCpVFt4Lqj9D5yBU4",
+      "ed25519:2HkgXxnkLxbAk4qgwZXtNZgzREYcNHySoha9am52V4PgjpXCRmRDHGXq4fPx52tis8Rj6JLch1Mz5qwUmeeCDVAZ",
+      null,
+      "ed25519:5sJRxDWDV5uoSoqyDfSShNrY8G5Y7AZeuGtgEwUP6oy2PPoiQDbeeRmAdSAi8Uqy3hkDrENjKvXeJ2Ea9d6wi9ux",
+      "ed25519:3eEraj1vkVSzGNvY7T7LXq9UTiVyY21NByQzDcKUZLajxFTT8Qf9Y2bbEoNFG2FF67N7JgFke9eHi52GaCC4GAvS",
+      "ed25519:tFJxNQPRUYCEGzoTXVViLFxJMJwM5AhuQkjbFtxid8J5BiLwc6QsqYMUJg2PmBrAEdcqinnXk6sLZSgeVmwpVVG",
+      "ed25519:4MKAPUWunc1BQXRESeiW1JMRRqGMHsVHdn9ZrAMLsUA8kdwMo5Uifr4LD2X4ohmJBEAs3fguCKeQVam2cV4GNWu",
+      "ed25519:67oeR1ZZ89V7Mxxrdo4nFbB7qqtAVXttkyDaVykYonWK3o4eJNiCXFJqtRvEnkhiXTBZuJrJ4YxUqUhJz8s2gsdm",
+      "ed25519:5JZmCts5wLTnap3hBvyWw6dUSyPkM7BPKHxHHdZxm2RhGfXhqz5D6TTknBRE8EQWf2EjJpmbkRQosfPASn4dndTp",
+      "ed25519:37X5fvuvLBpmzwCtTXMoVAb2gE8W55PikwdpJj6Jp2kwZ1M38f9nat6A9dMrNhe8EpCCZvVtftGs2jomMxCd4BKz",
+      "ed25519:2e4MRgRCTqqpNP4A279a4vr8RijENTS93hZS1d8P4vBNepfUuKVE841rUgCN5hGqCBE4EY8XjMA4dNSSY8zeZDve",
+      "ed25519:4pAtt9e4WJ25aH3tT7f2LA5vsefoH3romdEj3sd1Sq5ggsWyZoX3Vo4sYNrELP4A1Qrof2dEXR1TDgLdi6cuULFJ",
+      "ed25519:5bh9UhNY8gU3mVyaKQXsyUpFSdm7X3okiqHxWKNzxJsd5PMZP7JtVyg1redCv19it1M8dpvwdn4ZZoFje5UcFCD7",
+      "ed25519:KvqYhfG1DrJNP5XpBf3TgtGSFGszRPLT7BtC2bZ1yQ3N3Y61UWNgCsRBwebgq4YezBtAgv8MGfZqXsTSemSCbD1",
+      "ed25519:7uKYewpQD34U1UVAXrx35tPVGULB9ZYzZUv66haqHpGwpuKs8Tdrahm1ziaqZmuu1Qgw5B1Xg6EjouQxV4ZSvFf"
+    ],
+    "block_body_hash": "7198CtsypZ8nk1rDaQHYDoUitLMpKTJjSgQFDyeGuQip",
+    "block_merkle_root": "46kKDdygg2gEcZMuuA8fdmpr2LnFoSErrW5oex6gszZH",
+    "block_ordinal": 229060205,
+    "challenges_result": [],
+    "challenges_root": "11111111111111111111111111111111",
+    "chunk_endorsements": [
+      [
+        255,
+        255
+      ],
+      [
+        255,
+        255
+      ],
+      [
+        255,
+        63
+      ],
+      [
+        255,
+        31
+      ],
+      [
+        255,
+        254,
+        15
+      ],
+      [
+        247,
+        255,
+        1
+      ],
+      [
+        127,
+        119
+      ],
+      [
+        239,
+        127
+      ],
+      [
+        255,
+        255,
+        7
+      ],
+      [
+        255,
+        127
+      ]
+    ],
+    "chunk_headers_root": "EDExsMD7fJpjF8bgWk4yGXGqsmpVBcDihTVjRrH2Sqey",
+    "chunk_mask": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "chunk_receipts_root": "GZk2NMFgyUxCX24F6EiMPvfVuy84XiTjoPHqHy8szqPo",
+    "chunk_tx_root": "DaSM2dPALWoYAdBsRk51Lg4PJyJidoqELV8LK5kyRo9Z",
+    "chunks_included": 10,
+    "epoch_id": "FnAjVQVurgL1DVHysgCXZA3y7DjEx2Q819E9ncYdgtLw",
+    "epoch_sync_data_hash": null,
+    "gas_price": "100000000",
+    "hash": "Ayv2eeHV2duyJ2DRg33yYLAyBcPC9gTLkAKcc7K6Lxi5",
+    "height": 277068066,
+    "last_ds_final_block": "7CZtdgLCHcM3eMzmxBPuguQD5vGtEnkVjK3E1Kb1kskd",
+    "last_final_block": "9frU93nZRH5AE2X5nvEBhpkmXqPxLwvwxhw62qtopMXB",
+    "latest_protocol_version": 88,
+    "next_bp_hash": "3D6XD6XWtfnsGNt13u4BJmLgkeZz41xGkJyWF6LB3o9q",
+    "next_epoch_id": "Ajx2JWeiKxZ6gyygZJt3BuPaV4UJvNPo8dk8Z6apd7Pz",
+    "outcome_root": "6kXSioRWZh8k3khE71rS4s7KWkrE4J7BDuNYfmZfc4cf",
+    "prev_hash": "7CZtdgLCHcM3eMzmxBPuguQD5vGtEnkVjK3E1Kb1kskd",
+    "prev_height": 277068065,
+    "prev_state_root": "AQWi3rFbnCGm5ye2CoiAH8VS7WHWrq4H5ixxnKhvpxvv",
+    "random_value": "AcspkRTkCXCKtGPxaq2KSEeM8JKNBfXWktyMz4eXux2W",
+    "rent_paid": "0",
+    "shard_split": null,
+    "signature": "ed25519:4UBiwbCoFB6tnYsd9JyvMtvRkssRssFQfcSqZLoHbrsvYeMbBpjprGzjDcwqTcAvzuc19cGnV2SHaJvEPc7K9oCx",
+    "timestamp": 1794314072228185415,
+    "timestamp_nanosec": "1794314072228185415",
+    "total_supply": "2679605386779670802426596031268713",
+    "validator_proposals": [],
+    "validator_reward": "0"
+  }
+}

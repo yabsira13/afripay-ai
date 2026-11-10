@@ -95,3 +95,7 @@ CSV and aggregate reports require authenticated account access and explicitly fi
 ### 0.9 testnet invoice boundaries
 
 Saved testnet invoices are private to authenticated owners; anonymous/authenticated clients cannot write the table. All mutations occur in the authenticated, owner-scoped server route. Exact transfer binding, final successful execution/receipts, block hash/height/timestamp, one-time authorization and global transaction-hash uniqueness protect paid status. A wallet failure never automatically retries a transfer. Service-role credential security and trustworthy testnet RPC remain dependencies. This flow proves neither mainnet settlement nor cross-chain execution, legal identity or sponsored gas. No wallet secret is collected.
+
+### 0.9.2 shared testnet activity
+
+Shared activity stores public chain facts only: transaction hash, sender, recipient, native amount, execution block/time, verification time and public provider. Client roles cannot directly read/write the table; the authenticated API projects only these public fields for a named testnet address. A public wallet address is not treated as proof of ownership, and exposes no account email or private invoice fields. Native transactions must have exactly one matching Transfer and final successful receipt evidence before immutable hash-keyed insertion. Import/recheck never authorizes or sends another transfer. Tracked totals exclude fees and do not claim full external chain history. PDFs remain descriptive records whose hashes should be checked in the explorer.
