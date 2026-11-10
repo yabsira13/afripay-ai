@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {APIError} from './server';
 const PROVIDERS=['https://test.rpc.fastnear.com','https://near-testnet.drpc.org'];
-export async function testnetRpc(method:'query'|'tx',params:Record<string,unknown>){
+export async function testnetRpc(method:'query'|'tx'|'block',params:Record<string,unknown>){
  for(const provider of PROVIDERS){try{
   const response=await fetch(provider,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:'afripay-testnet',method:method==='tx'?'EXPERIMENTAL_tx_status':method,params}),signal:AbortSignal.timeout(10000),cache:'no-store'});
   if(!response.ok)continue;const data=await response.json();

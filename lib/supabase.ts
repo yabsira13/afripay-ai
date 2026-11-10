@@ -1,4 +1,5 @@
 'use client';
+import {withDeadline} from './deadline';
 import {createClient,type SupabaseClient} from '@supabase/supabase-js';
 import {checkAuthSettings,type PublicAuthSettings} from './auth-settings';
 let client:SupabaseClient|null=null;
@@ -11,7 +12,7 @@ export function authClient(){
 }
 /** Runtime public settings avoid a stale frontend build disabling configured auth. */
 export async function initializeAuth(){
- const response=await fetch('/api/config',{cache:'no-store',signal:AbortSignal.timeout(10000)});
+ const response=await fetch('/api/config',{cache:'no-store',signal:AbortSignal.timeout(4000)});
  if(!response.ok)throw new Error('Account setup could not be checked. Check your connection and retry.');
  const data=await response.json();
  const result=checkAuthSettings(data.supabase?.url,data.supabase?.publishableKey);
@@ -23,7 +24,7 @@ export async function initializeAuth(){
 /** Bind an operation to this account's token, even if another tab switches accounts. */
 export async function accountClient(userId:string){
  const shared=authClient();if(!shared)throw new Error('Supabase is not configured.');
- const {data,error}=await shared.auth.getSession();
+ const {data,error}=await withDeadline(shared.auth.getSession(),3000,'Account session check timed out. Sign in again or retry.');
  if(error||data.session?.user.id!==userId)throw new Error('Your account changed. Sign in again before saving.');
- return createClient(settings!.url,settings!.publishableKey,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},global:{headers:{Authorization:'Bearer '+data.session.access_token}}});
+ return createClient(settings!.url,settings!.publishableKey,{accessToken:async()=>data.session!.access_token});
 }

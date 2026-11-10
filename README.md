@@ -6,11 +6,34 @@ AFRIPAY AI helps African businesses review supplier invoices, detect suspicious 
 
 - **Live prototype:** https://afripay-ai.vercel.app/
 - **Public repository:** https://github.com/yabsira13/afripay-ai
-- **Version:** 0.8.0
+- **Version:** 0.9.0
 - **Founder and developer:** Yabsera Teklemariyam
 - **Contact:** yabsiratekle@gmail.com
 
 **This is a hackathon prototype. DUSD credits remain simulated. Version 0.7 adds an operator-gated native-NEAR-funded Intents pilot, OFF by default. Its application code is tested; a funded end-to-end mainnet transaction has NOT yet been demonstrated.**
+
+## New in 0.9: saved testnet invoice payments and faster startup
+
+[Install 0.9 and run the testnet walkthrough](docs/RELEASE-0.9.md). **NEAR testnet** now includes private saved invoices: create an invoice for a named `.testnet` recipient, review it, approve a native NEAR transfer in your own testnet wallet, then verify its exact transaction and open its explorer link. Only final successful execution with matching sender, recipient, amount, block height and a block timestamp after creation can mark it paid. A transaction hash cannot pay two invoices. A cancelled/uncertain signing request stays locked; recover its existing hash rather than paying again.
+
+**Evidence boundary:** automated tests exercise the application, database authorization and mocked RPC/browser responses. No wallet-signed AFRIPAY testnet invoice payment has yet been demonstrated by the developer in this release. The first actual signed run and its explorer URL remain a required acceptance step. Mainnet Intents settlement is separately unproven end to end. Testnet native transfers do not prove cross-chain execution or gas sponsorship.
+
+Startup now bounds configuration/session/cloud reads, avoids extra auth clients for database calls and offers public NEAR checks while saved data loads. A cloud timeout shows a labeled local fallback; it does not claim cloud saving succeeded. Mainnet/testnet and authentication pages do not wait for simulated workspace storage. Live **Invoices** opens the shareable invoice form. The landing footer now shows the publication date.
+
+### Real, simulated and still to verify
+
+| Capability | Implementation and evidence |
+| --- | --- |
+| DUSD balances, supplier payments and demo receipts | Simulated credits, no cash value; database/account flows tested |
+| Native NEAR balances and account/transaction lookups | Real public RPC reads; unavailable evidence stays unavailable |
+| Saved testnet invoice → wallet transfer → explorer/JSON receipt | Implemented with server verification and private database records; actual signed acceptance run still required |
+| Mainnet invoice links, funding and settlement monitoring | Implemented operator-gated pilot; no successful funded AFRIPAY end-to-end settlement claimed |
+| NEAR Intents discovery and dry quotes | Official API integration and quote-signature validation; dry quotes do not transfer funds |
+| CSV export | Live order records with explicit units/status; no invented FX conversions |
+| Gas sponsorship / arbitrary source-chain wallets | Not implemented; native NEAR wallet source only |
+| Security Shield | Real public observations plus explainable heuristics; no guarantee that a wallet is safe |
+
+Run the additive **`supabase/testnet-invoices.sql`** once after installing 0.9. Keep the server-only `SUPABASE_SERVICE_ROLE_KEY` and existing public Supabase settings. Testnet invoices do not require enabling the mainnet funding flag. Never place server credentials in a `NEXT_PUBLIC_` variable or commit `.env.local`.
 
 ## New in 0.8: invoice links, live reporting and evidence
 
@@ -30,7 +53,7 @@ Install the additive `supabase/live-payment-links.sql` LAST. Existing 0.7 server
 | Transfer and Receive | Account receive codes, recipient review, atomic debit/credit, named counterparties and received totals |
 | Receipts | Sender and receiver see the same reference, amount, recorded names and branded PDF |
 | Accounts | Supabase signup, confirmation, sign-in, recovery, private profiles and account-owned demo storage |
-| NEAR | Read-only mainnet balance, public wallet/transaction observations and a separate native NEAR testnet transfer lab |
+| NEAR | Read-only mainnet balance, public wallet/transaction observations and saved native NEAR testnet invoices and a separate quick-transfer lab |
 | NEAR Intents | Official token discovery, verified signed quotes and a gated native-NEAR-funded pilot with persistent approval/monitoring |
 | Assistant | Structured local payment proposals; optional authenticated model interface; no wallet execution tools |
 | Business tools | Shareable invoice checkout, live CSV/reporting, supplier review, restricted admin, policies and private feedback |

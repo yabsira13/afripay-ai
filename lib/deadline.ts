@@ -1,0 +1,2 @@
+/** Stop waiting without accepting late results. Callers abort network work separately when possible. */
+export function withDeadline<T>(work:PromiseLike<T>,ms:number,message:string):Promise<T>{return new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error(message)),ms);Promise.resolve(work).then(value=>{clearTimeout(timer);resolve(value);},error=>{clearTimeout(timer);reject(error);});});}

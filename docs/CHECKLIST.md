@@ -218,3 +218,16 @@ No email, mainnet transaction, repository publication, deployment or hackathon s
 - [ ] Founder installs 0.8 SQL, deploys and verifies private reports/public links
 - [ ] Explicitly approved actual mainnet invoice payment and settlement/receipt proof
 - [ ] Funded end-to-end video/X post and approved final hackathon submission
+
+## Version 0.9 testnet invoice and startup changes
+
+- [x] Saved private native NEAR testnet invoices with one-time wallet authorization
+- [x] Exact transaction/receipt, execution-block height and timestamp validation before PAID
+- [x] Unique transaction hash, private reads and denied browser writes
+- [x] Manual hash recovery, explorer links and verified testnet JSON receipt
+- [x] Bounded configuration/session/cloud loads; useful public navigation during loading
+- [x] Live Invoices opens shareable invoice creation; landing publication footer corrected
+- [x] README distinguishes real public reads, implemented payment pilots, DUSD simulation and missing funded evidence
+- [ ] Founder installs additive testnet SQL and deploys 0.9
+- [ ] Founder signs the first actual testnet invoice payment and records its explorer URL
+- [ ] Independently demonstrate a funded mainnet Intents settlement; no claim of gas sponsorship

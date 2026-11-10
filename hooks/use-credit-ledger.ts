@@ -7,7 +7,7 @@ export function useCreditLedger(userId:string|null|undefined){
  const ownerRef=useRef(userId);ownerRef.current=userId;
  const refresh=useCallback(()=>setRevision(v=>v+1),[]);
  useEffect(()=>{if(!userId)return;const owner=userId;let active=true;
-  void accountClient(owner).then(client=>client.rpc('afripay_credit_summary')).then(({data,error})=>{if(!active||ownerRef.current!==owner)return;const parsed=creditSummarySchema.safeParse(data);if(error||!parsed.success||parsed.data.account.user_id!==owner)throw new Error('Demo credits could not be verified. Run supabase/final-payments.sql after the earlier migrations if needed, then refresh.');setState({userId:owner,data:parsed.data,error:''});}).catch(error=>{if(active&&ownerRef.current===owner)setState({userId:owner,data:null,error:(error as Error).message});});
+  void accountClient(owner).then(client=>client.rpc('afripay_credit_summary').abortSignal(AbortSignal.timeout(6000))).then(({data,error})=>{if(!active||ownerRef.current!==owner)return;const parsed=creditSummarySchema.safeParse(data);if(error||!parsed.success||parsed.data.account.user_id!==owner)throw new Error('Demo credits could not be verified. Run supabase/final-payments.sql after the earlier migrations if needed, then refresh.');setState({userId:owner,data:parsed.data,error:''});}).catch(error=>{if(active&&ownerRef.current===owner)setState({userId:owner,data:null,error:(error as Error).message});});
   return()=>{active=false;};
  },[userId,revision]);
  useEffect(()=>{const focus=()=>refresh();window.addEventListener('focus',focus);return()=>window.removeEventListener('focus',focus);},[refresh]);
