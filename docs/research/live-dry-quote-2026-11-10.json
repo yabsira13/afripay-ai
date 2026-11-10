@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-11-10T07:04:22.054Z",
+  "notice": "Read-only indicative quote using synthetic recipient data. No deposit address, wallet authorization or funding. No payment was made.",
+  "signatureVerified": true,
+  "response": {
+    "mode": "live",
+    "dry": true,
+    "source": {
+      "assetId": "nep141:wrap.near",
+      "decimals": 24,
+      "blockchain": "near",
+      "symbol": "wNEAR",
+      "price": 3.63,
+      "priceUpdatedAt": "2026-11-10T07:02:30.665Z",
+      "contractAddress": "wrap.near",
+      "coingeckoId": "wrapped-near"
+    },
+    "target": {
+      "assetId": "nep141:base-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913.omft.near",
+      "decimals": 6,
+      "blockchain": "base",
+      "symbol": "USDC",
+      "price": 0.99947,
+      "priceUpdatedAt": "2026-11-10T07:02:30.665Z",
+      "contractAddress": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "coingeckoId": "usd-coin"
+    },
+    "result": {
+      "quote": {
+        "amountIn": "100000000000000000000000",
+        "amountInFormatted": "0.1",
+        "amountInUsd": "0.363000000000",
+        "minAmountIn": "100000000000000000000000",
+        "amountOut": "361143",
+        "amountOutFormatted": "0.361143",
+        "amountOutUsd": "0.360951594210",
+        "minAmountOut": "359337",
+        "timeEstimate": 24,
+        "refundFee": "0",
+        "withdrawFee": "2400"
+      },
+      "quoteRequest": {
+        "dry": true,
+        "depositMode": "SIMPLE",
+        "swapType": "EXACT_INPUT",
+        "slippageTolerance": 50,
+        "originAsset": "nep141:wrap.near",
+        "depositType": "ORIGIN_CHAIN",
+        "destinationAsset": "nep141:base-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913.omft.near",
+        "amount": "100000000000000000000000",
+        "refundTo": "near.near",
+        "refundType": "ORIGIN_CHAIN",
+        "recipient": "0x1111111111111111111111111111111111111111",
+        "recipientType": "DESTINATION_CHAIN",
+        "deadline": "2026-11-10T07:06:26.334Z",
+        "confidentiality": "public",
+        "quoteWaitingTimeMs": 0,
+        "insured": false,
+        "appFees": [
+          {
+            "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+            "fee": 20
+          }
+        ]
+      },
+      "signature": "ed25519:YaR678DYt8ysfEAMBkhP8321ujntvSFtnT4viEjDZQ1CrG39DfbYr74ENcKG2i8cHomq6woiJM4KQrbKLEWFhGi",
+      "timestamp": "2026-11-10T07:03:26.388Z",
+      "correlationId": "092194f1-634b-4e70-8af9-1c71a1ff636e"
+    },
+    "notice": "Genuine indicative quote. No deposit address requested. Live funding is disabled in this release."
+  }
+}

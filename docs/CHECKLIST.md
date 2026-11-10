@@ -187,3 +187,18 @@ No email, mainnet transaction, repository publication, deployment or hackathon s
 - [ ] Founder installs final-payments.sql LAST and verifies both hosted accounts
 - [ ] Real email, authorized wallet execution, hosting, public repository and X demo
 - [ ] Funded mainnet Intents coordinator and verified settlement
+
+## Version 0.7 mainnet pilot
+
+- [x] Supported destination network/asset selection and manually confirmed address
+- [x] Production-key quote verification, dry approval then committed quote
+- [x] Native NEAR exact funding request, once-only authorization, saved history
+- [x] Private service-written orders/events, limits, duplicate and retry guards
+- [x] Final origin funding and bound provider settlement checks; SUCCESS-only receipts
+- [x] 273 automated tests; 84 final browser journeys; typecheck/build/40-route smoke
+- [x] Actual hosted token discovery and signature-verified dry quote, with no funding
+- [ ] Founder installs live SQL and server-only credential
+- [ ] Deploy and verify operator-gated live mode on founder's hosting
+- [ ] Explicitly reviewed and wallet-authorized tiny mainnet pilot
+- [ ] Actual funded success, destination receipt and failure/refund verification
+- [ ] Record true end-to-end demo and finish approved hackathon submission

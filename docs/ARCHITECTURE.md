@@ -98,3 +98,9 @@ One scoped credit-ledger hook supplies Dashboard, Pay, Transfer, Receive and Tra
 An additive migration snapshots participant labels, adds purpose/supplier/invoice references and exposes participant-only canonical receipts. A separate PDF generator consumes that canonical DUSD receipt and its fixed recorded timestamp. It never creates a blockchain hash.
 
 Supplier payments hold an approved supplier snapshot and, when linked, the payer's saved invoice/workspace revision. Backend checks derive the recipient from the application owner. Invoice update, debit, credit and journal recording share the database transaction. Idempotent replays return the recorded row before reconsidering later invoice/supplier edits; changed payloads under the same approval ID are rejected.
+
+## Version 0.7 mainnet pilot
+
+`lib/live-payments.ts` validates supported inputs, exact-output units, bound quotes, native funding and settlement evidence. `lib/live-server.ts` verifies Supabase sessions and official 1Click signatures. Fixed URLs only; no arbitrary contract execution. `app/api/live` owns the persisted quote → commit → authorization → funding → observation lifecycle. A server-only Supabase service credential invokes service-only SQL coordinator functions; authenticated browsers can read only their own orders/events. Independent live references never change DUSD documents.
+
+`supabase/live-payments.sql` serializes budget/order changes, claims external steps once, reserves uncertain outcomes, records audit events and restricts receipt eligibility to verified SUCCESS. The browser constructs no free-form wallet actions: it receives exactly one reviewed native Transfer request. Provider-confirmed destination settlement is bound to a final NEAR funding transaction; independent destination-chain decoding is not provided.

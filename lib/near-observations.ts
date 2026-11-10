@@ -39,3 +39,6 @@ export async function observeTransaction(hash:string,sender:string,network:NearN
  if(!result)return {mode:'live',readOnly:true,network,hash,sender,status:'unknown',provider,checkedAt:new Date().toISOString(),notice:'Transaction not found or final execution is unavailable. Check the sender, hash and network. No success is assumed.'};
  return {mode:'live',readOnly:true,network,...inspectLookupTransaction(result,hash,sender),provider,checkedAt:new Date().toISOString()};
 }
+
+/** Fixed-provider RPC shared by the guarded mainnet coordinator. */
+export {rpc as nearRpc};

@@ -23,7 +23,7 @@ export async function api(request: Request, action: ()=>Promise<unknown>) {
 }
 export async function json(request: Request) {const raw=await request.text();if(raw.length>2_000_000)throw new APIError('Request too large.',413);try{return JSON.parse(raw);}catch{throw new APIError('Invalid JSON.');}}
 export async function oneClick(path:string,body?:unknown) {
- const response=await fetch('https://1click.chaindefuser.com/v0'+path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json',...(process.env.ONECLICK_API_TOKEN?{Authorization:`Bearer ${process.env.ONECLICK_API_TOKEN}`}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(20000),cache:'no-store'});
+ const response=await fetch('https://1click.chaindefuser.com/v0'+path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json',...(process.env.ONECLICK_API_KEY?{'X-API-Key':process.env.ONECLICK_API_KEY}:{}),...(process.env.ONECLICK_API_TOKEN?{Authorization:`Bearer ${process.env.ONECLICK_API_TOKEN}`}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(20000),cache:'no-store'});
  if(!response.ok)throw new APIError(`NEAR Intents returned HTTP ${response.status}. Live data unavailable; no simulated result was substituted.`,502);
  return response.json();
 }

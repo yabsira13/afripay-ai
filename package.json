@@ -1,6 +1,6 @@
 {
   "name": "afripay-ai",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack --hostname 0.0.0.0",
@@ -15,6 +15,7 @@
     "setup": "node scripts/setup.mjs"
   },
   "dependencies": {
+    "@defuse-protocol/one-click-sdk-typescript": "^0.1.26",
     "@hot-labs/near-connect": "0.12.0",
     "@pdf-lib/fontkit": "^1.1.1",
     "@supabase/supabase-js": "^2.99.0",

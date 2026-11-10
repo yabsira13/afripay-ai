@@ -1,4 +1,4 @@
-# Run and deploy AFRIPAY 0.6
+# Run and deploy AFRIPAY 0.7
 
 ## On Windows
 
@@ -11,7 +11,7 @@ npm.cmd ci
 npm.cmd run dev
 ```
 
-Open the exact Local URL printed by the terminal. Guest invoice review works without credentials; demo approval/downloads require sign-in; connecting a wallet is separate from signing in. A signed-in demo displays its cloud-save status. No real funds move in Demo. New workspaces start empty. DUSD test credits require an explicit once-only grant and are not blockchain funds. See RELEASE-0.6.md for the current two-account/receipt walkthrough.
+Open the exact Local URL printed by the terminal. Guest invoice review works without credentials; demo approval/downloads require sign-in; connecting a wallet is separate from signing in. A signed-in demo displays its cloud-save status. No real funds move in Demo. New workspaces start empty. DUSD test credits require an explicit once-only grant and are not blockchain funds. See RELEASE-0.6.md for the demo two-account/receipt walkthrough.
 
 ## Supabase setup
 
@@ -32,8 +32,8 @@ For local testing, set Supabase Site URL to your exact local origin and allow `/
 ## Optional integrations
 
 - AI: set `AI_BASE_URL`, `AI_API_KEY` and `AI_MODEL` for a provider supporting strict JSON schema. Signed-in users can opt into invoice extraction/model payment proposals. Default assistant behavior is explicitly labeled local rule-based parsing. Model calls are authenticated and have no wallet tools.
-- Intents: an optional partner token goes in server-only `ONECLICK_API_TOKEN`. Current integration supports discovery, dry quotes and status lookups, not funded swaps. Token discovery returned HTTP 403 from the managed environment; verify the deployed connection and disclose errors honestly.
-- NEAR wallet: mainnet connection reads native NEAR balances only. A separate native testnet lab requires the user's explicit wallet approval and verifies final execution. No keys or seed phrases are stored.
+- Intents: an optional partner token goes in server-only `ONECLICK_API_TOKEN`. The separate 0.7 pilot adds committed quotes and wallet funding behind server configuration; see RELEASE-0.7.md. No funded end-to-end swap is yet verified. Token discovery returned HTTP 403 from the managed environment; verify the deployed connection and disclose errors honestly.
+- NEAR wallet: the balance card reads native NEAR. The separate mainnet Pay pilot requires operator setup and exact wallet approval. A separate native testnet lab requires the user's explicit wallet approval and verifies final execution. No keys or seed phrases are stored.
 
 ## Production checks
 
@@ -63,3 +63,7 @@ Vercel/Supabase free plans are proposed for a hackathon prototype within their c
 The Dockerfile prepares a non-root standalone Next.js runtime. Build with `docker build -t afripay-ai .`, then run with `docker run --rm -p 3000:3000 --env-file .env.local afripay-ai`. Runtime public configuration supports environment variables added after the build. Never bake private keys or API secrets into the image. The container build has not been executed in this session.
 
 No public repository or hosted site was published during this update. Local success is not a deployment URL or a verified blockchain payment.
+
+## Real-payment pilot configuration
+
+Read [RELEASE-0.7.md](RELEASE-0.7.md) before enabling. Install `supabase/live-payments.sql` separately, keep `SUPABASE_SERVICE_ROLE_KEY` server-only, start `LIVE_PAYMENTS_ENABLED=false`, and verify settings before choosing to enable wallet requests. Monitoring remains available when new funding is disabled. The 0.7 pilot has automated coverage but needs actual hosted and funded wallet testing.

@@ -6,11 +6,17 @@ AFRIPAY AI helps African businesses review supplier invoices, detect suspicious 
 
 - **Live prototype:** https://afripay-ai.vercel.app/
 - **Public repository:** https://github.com/yabsira13/afripay-ai
-- **Version:** 0.6.0
+- **Version:** 0.7.0
 - **Founder and developer:** Yabsera Teklemariyam
 - **Contact:** yabsiratekle@gmail.com
 
-**This is a hackathon prototype. DUSD transfers are valueless database test credits, not NEAR, USDC or bank payments. Funded mainnet NEAR Intents payments are unfinished and disabled.**
+**This is a hackathon prototype. DUSD credits remain simulated. Version 0.7 adds an operator-gated native-NEAR-funded Intents pilot, OFF by default. Its application code is tested; a funded end-to-end mainnet transaction has NOT yet been demonstrated.**
+
+## New in 0.7: guarded live payment pilot
+
+[Setup and exact verification boundary](docs/RELEASE-0.7.md). Live wallet → Pay provides supported destination/network/address selection, signed dry and committed quote checks, explicit wallet approval, private persistent orders, limits, final native funding checks and provider-bound settlement/receipt handling. Install the separate `supabase/live-payments.sql` and server-only credential; do not treat the existing hosted 0.6 deployment as updated until deployed and tested. Demo invoices are not marked paid by this separate live reference.
+
+The demo walkthrough remains available. Live funding is a separate pilot: read its setup guide and complete a funded verification before presenting it as demonstrated.
 
 ## What works
 
@@ -23,7 +29,7 @@ AFRIPAY AI helps African businesses review supplier invoices, detect suspicious 
 | Receipts | Sender and receiver see the same reference, amount, recorded names and branded PDF |
 | Accounts | Supabase signup, confirmation, sign-in, recovery, private profiles and account-owned demo storage |
 | NEAR | Read-only mainnet balance, public wallet/transaction observations and a separate native NEAR testnet transfer lab |
-| NEAR Intents | Official 1Click token discovery, genuine dry quotes when available and read-only status lookup |
+| NEAR Intents | Official token discovery, verified signed quotes and a gated native-NEAR-funded pilot with persistent approval/monitoring |
 | Assistant | Structured local payment proposals; optional authenticated model interface; no wallet execution tools |
 | Business tools | Supplier application/review, restricted administrator console, analytics, policies and private feedback |
 
@@ -70,13 +76,13 @@ The database checks current approval, invoice revision, spending policies, dupli
 
 ### 5. Explore NEAR and invoice previews
 
-- **Live wallet** shows actual native NEAR balance when RPC is available; it does not execute mainnet payments or value other tokens in USD.
+- **Live wallet** shows actual native NEAR balance when RPC is available; the separate **Live wallet → Pay** pilot requires operator setup and explicit wallet authorization. Other tokens are not valued in USD.
 - **NEAR explorer** reads public wallet state or final transaction execution on the explicitly selected network. Unknown or unavailable data stays unknown.
 - **NEAR testnet** is a separate native transfer lab using test tokens, review, user wallet authorization and final RPC checks. It does not settle demo invoices.
 - **Open invoice preview** preserves route comparison, risk review and explicit simulated settled/failed/refunded outcomes. These previews do not move DUSD. Their history is labeled separately.
 - In the preview, **Live NEAR Intents dry quote** requests real API data when supported. Upstream failures are displayed, never replaced with simulated quotes. No funding or success is implied by a dry quote.
 
-NEAR Intents 1Click is mainnet-only; a native NEAR testnet transfer is not an Intents testnet swap. Mainnet funding, committed quotes and automatic settlement reconciliation are not implemented.
+NEAR Intents 1Click is mainnet-only; a native NEAR testnet transfer is not an Intents testnet swap. Version 0.7 implements the separate committed-quote, wallet funding and settlement-check pilot. It remains OFF by default and has not yet completed an actual funded swap.
 
 ## Run locally
 
@@ -142,26 +148,26 @@ To update an existing deployment, commit the intended files and push to its conn
 
 ## Verification and limitations
 
-Version 0.6 release checks passed:
+Version 0.7 release checks passed:
 
-- **234 automated unit/API/security/embedded PostgreSQL tests**.
-- **74 desktop/mobile Chromium browser journeys**.
+- **273 automated unit/API/security/embedded PostgreSQL tests**.
+- **84 desktop/mobile Chromium browser journeys**.
 - TypeScript, optimized production build and **40-route** production startup smoke.
 - Downloaded PDF rendering and visual inspection.
 
 Database tests execute actual migrations in embedded PostgreSQL. Account browser tests use the actual SDK against a mock service, not real inboxes. Mobile viewport emulation is not physical Safari or a wallet-app test. Prior read-only API checks observed a real testnet account and an existing public mainnet transaction; AFRIPAY did not initiate that transaction.
 
-Separately, the founder reported successful hosted account, two-account transfer/payment, matching balance/receipt, suspicious-invoice and recovery tests. These are human-reported checks, not automated proof of every production path. The README-only update does not rerun the application's release suite. See [verification details](docs/VERIFICATION.md).
+Separately, the founder reported successful hosted account, two-account transfer/payment, matching balance/receipt, suspicious-invoice and recovery tests. These are human-reported checks, not automated proof of every production path. The 0.7 code update reran the release checks. Real hosted token discovery and a signature-verified indicative dry quote also succeeded on November 10; neither sent funds. See [verification details](docs/VERIFICATION.md).
 
 Remaining limits:
 
-- Funded mainnet Intents execution, real financial receipts and automatic mainnet invoice reconciliation are unfinished.
+- The gated mainnet coordinator is implemented but not yet proven with a funded end-to-end swap. Live orders use separate references and never change DUSD invoice documents. Destination settlement is provider-confirmed, not independently decoded on every destination chain.
 - External malicious-address/phishing feeds and full historical flow analysis are not configured. Low heuristic risk is not a safety guarantee; a new wallet alone is not treated as a scam.
 - Scanned PDFs without a text layer need image upload or manual entry. English OCR can make mistakes. QR decoding, document signature verification and redirect inspection are not implemented; untrusted URLs are not automatically opened.
 - Demo documents/audits are editable, not production financial audit logs. DUSD has no redemption or cash value. No real FX valuation is provided.
 - Rate limiting is per-process; a shared/edge limiter and broader operational review are needed for production financial use.
 - Gmail and Supabase authentication limits still apply. Hosting does not automatically install SQL, configure SMTP or ensure email delivery.
-- No wallet-authorized mainnet transfer, recorded demo video, X demo post or hackathon submission is claimed here.
+- No wallet-authorized mainnet transfer, public X demo post or final submission is claimed. A narrated guest website tour exists; the signed-in/funded end-to-end demo still needs recording.
 
 ### Reproduce checks
 
@@ -201,7 +207,7 @@ flowchart LR
 
 - `components/`, `hooks/`, `app/globals.css`: workspace, shared ledger screens and responsive design.
 - `lib/security.ts`, `lib/invoice.ts`, `lib/assistant.ts`: evidence rules and structured extraction/proposals.
-- `app/api/`: bounded integrations; no mainnet funding coordinator.
+- `app/api/live/` and `lib/live-server.ts`: authenticated, operator-gated mainnet coordinator. Other `app/api/` routes provide bounded integrations.
 - `supabase/`: account, supplier, workspace, credit and feedback migrations.
 - `tests/`: unit, API, security, database and browser checks.
 - `samples/`: invoice examples and a clearly labeled demo credit receipt.
@@ -227,4 +233,4 @@ Official integration research was checked November 4, 2026, with records under `
 - https://docs.near-intents.org/api-reference/oneclick/request-a-swap-quote.md
 - https://docs.near-intents.org/api-reference/oneclick/check-swap-execution-status.md
 
-README updated November 9, 2026. Repository and live deployment are public; no final competition submission has been made by this update.
+README updated November 10, 2026. Repository and live deployment are public; no final competition submission has been made by this update.

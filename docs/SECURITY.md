@@ -77,3 +77,11 @@ Resend remains an external Supabase SMTP configuration. No SMTP sending API or c
 - Fixed caps and saved lower policies apply to friend/supplier operations. Locks follow document-before-account and stable account-ID order. Summary JSON selects account and all totals/history in one statement snapshot; it does not combine an older balance with newer aggregates.
 - Approval IDs are bound to details server-side. The client freezes uncertain operations and reuses that ID, so a lost response cannot silently create a second debit. Frontend data validation rejects malformed summaries, unsupported asset claims and mismatched receipt references.
 - These are test-credit controls, not real-money custody, cryptographic quote verification or mainnet settlement. Existing founder-hosted data/credentials, distributed anti-abuse controls and funded Intents coordination still require the documented production work.
+
+## Version 0.7: real mainnet pilot boundary
+
+Funding is operator-gated and disabled by default. A server-only Supabase service key is required; never expose it with NEXT_PUBLIC_ or commit it. Session verification uses Auth getUser, not user IDs supplied by the client. The official SDK verifies quotes with its pinned production key. Source/destination/amount/refund/slippage/deadline are checked against saved approval, and committed terms may not worsen. Memo/custom-instruction funding is rejected.
+
+Only a native NEAR Transfer to the saved deposit address can be requested. The wallet must independently authorize Mainnet. Database locks, invoice-reference uniqueness, a recent-match guard, once-only external-step claims and conservative reservations protect retries. A cancelled or uncertain wallet result cannot automatically reset the authorization. Audit events are protected from browser writes, not immutable against the database operator.
+
+No timer, model prose or wallet-returned hash can mark an order paid. Final origin execution plus matching provider SUCCESS, the signed quote, origin hash, destination hashes and minimum received amount are required. Provider status remains a trust dependency; refund-chain verification and independent destination receipt decoding are not implemented. Tests are not a security audit, and a funded end-to-end pilot remains required.
