@@ -126,3 +126,9 @@ Testnet routes now render distinct overview, invoice, pay, transfer, receive, tr
 GET reads the latest 100 matching public facts for a wallet, never private invoice rows. No wallet ownership or email identity is inferred from a public address. Totals use integer atomic amounts and cover only the tracked records. Saved invoice payment verification publishes matching public facts after PAID; a failed shared-history write leaves PAID intact and offers hash sync, never automatic resend. Existing paid invoices and browser transfers can be verified/imported without another transfer.
 
 Invoice PDFs and final-payment receipt PDFs are generated locally with embedded bundled fonts. Private invoice descriptions stay in owner-scoped records/PDFs; receiving wallets see public chain payment receipts.
+
+## 0.9.3 wallet-session lifecycle
+
+`WalletSession` owns one lazy NEAR Connector per account/network in the browser tab. `useSyncExternalStore` subscribers can mount/unmount across navigation without disposing that connector. Provider storage and disconnect markers are account/network scoped; public-address caching is not accepted as connection evidence. Restore uses the provider's selected wallet and fresh accounts. Active sessions have no idle-expiry timer. Explicit disconnect/logout clears the displayed address immediately, blocks late sign-in/restore results and waits only a bounded time for provider cleanup. Provider sign-out and actual missing-account results clear the session; transient checks do not silently disconnect it. A changed wallet account invalidates payment review.
+
+Mainnet connection from Pay preserves the payment form. Supported mainnet tools use the existing server-funded pilot and caps; client availability status does not authorize any transaction. Incoming mainnet history projects only the current account's verified paid published requests. No demo records are reclassified as mainnet payments.

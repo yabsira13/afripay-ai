@@ -244,3 +244,16 @@ No email, mainnet transaction, repository publication, deployment or hackathon s
 - [ ] Founder installs `testnet-activity.sql`, deploys 0.9.2 and syncs existing payment to shared activity
 - [ ] Hosted sender/receiver activity and final PDF download acceptance check
 - [ ] Funded mainnet Intents end-to-end settlement remains unproven
+
+## Version 0.9.3 wallet and list improvements
+
+- [x] Persistent account/network-scoped wallet-session store independent of page components
+- [x] Manual disconnect, logout cleanup, provider sign-out and account-change detection
+- [x] No AFRIPAY idle disconnect; cached address distinguished from actual provider session
+- [x] All/Sent/Received transaction filters, compact invoice rows and expandable details
+- [x] Mobile wrapping/overlap checks and desktop/mobile screenshot review
+- [x] Mainnet enabled status and supported payment/invoice/reporting tools exposed clearly
+- [x] Public mainnet configuration and asset discovery checked without signing or sending funds
+- [ ] Founder deploys 0.9.3 and reconnects wallets once after the storage migration
+- [ ] Physical wallet idle/navigation acceptance check with founder's provider
+- [ ] Funded mainnet Intents settlement remains unproven

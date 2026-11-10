@@ -1,0 +1,7 @@
+# 0.9.3 verification
+
+352 unit/API/database tests passed, including 14 wallet-session lifecycle tests: page subscription changes, idle time, actual-provider restore versus saved-address fallback, manual/provider disconnect, logout during pending restore, account changes, transient failures, wrong-network accounts and cancelled wallet changes. No signing request occurs in these session tests.
+
+The production build passed. All **122 desktop/mobile Chromium checks passed**, including direction filters, compact invoice detail views, account logout cleanup, received mainnet invoice settlements and non-overlap assertions. The **41-route production smoke check passed**. All **10 final focused desktop/mobile checks passed** after the last copy/assistant-access updates, including that mainnet assistant proposals cannot trigger payment execution. An additional 20 focused wallet-session/workspace checks passed. Screenshots were inspected on desktop and mobile. Browser provider/account/payment data uses fixtures; this is not a claim that an actual wallet provider was exercised for hours or that a mainnet payment was sent.
+
+Read-only checks of the hosted public configuration returned version 0.9.2, `liveFundingEnabled: true` and configured account access. Public token discovery returned 216 raw provider assets. The UI exposes only the supported subset of destination networks/assets and native NEAR source funding. No secrets were read or changed and no mainnet transaction was authorized.
