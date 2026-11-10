@@ -6,17 +6,19 @@ AFRIPAY AI helps African businesses review supplier invoices, detect suspicious 
 
 - **Live prototype:** https://afripay-ai.vercel.app/
 - **Public repository:** https://github.com/yabsira13/afripay-ai
-- **Version:** 0.7.0
+- **Version:** 0.8.0
 - **Founder and developer:** Yabsera Teklemariyam
 - **Contact:** yabsiratekle@gmail.com
 
 **This is a hackathon prototype. DUSD credits remain simulated. Version 0.7 adds an operator-gated native-NEAR-funded Intents pilot, OFF by default. Its application code is tested; a funded end-to-end mainnet transaction has NOT yet been demonstrated.**
 
-## New in 0.7: guarded live payment pilot
+## New in 0.8: invoice links, live reporting and evidence
 
-[Setup and exact verification boundary](docs/RELEASE-0.7.md). Live wallet → Pay provides supported destination/network/address selection, signed dry and committed quote checks, explicit wallet approval, private persistent orders, limits, final native funding checks and provider-bound settlement/receipt handling. Install the separate `supabase/live-payments.sql` and server-only credential; do not treat the existing hosted 0.6 deployment as updated until deployed and tested. Demo invoices are not marked paid by this separate live reference.
+[Install and follow the judge walkthrough](docs/RELEASE-0.8.md). Live **Receive** publishes an immutable invoice request; its public `/pay/<token>` page locks the destination and amount, then continues into the guarded wallet-payment pilot. Opening a link never approves or sends anything. Publication is explicit and must not contain confidential data. The database prevents competing payers from reserving the same request; only verified settlement can mark it PAID.
 
-The demo walkthrough remains available. Live funding is a separate pilot: read its setup guide and complete a funded verification before presenting it as demonstrated.
+Live **Transactions** now has authenticated CSV export with explicit units/paid status and origin/destination explorer links. Live **Security Shield** exposes real NEAR observations with plain-English limits and saved order evidence. Live **Analytics** counts verified settlements and groups asset totals without inventing USD valuation. New workspaces remain empty; **Try guided invoice demo** is opt-in.
+
+Install the additive `supabase/live-payment-links.sql` LAST. Existing 0.7 server settings remain necessary. The separate mainnet pilot still requires a human-approved funded end-to-end test; no such successful AFRIPAY swap is claimed here. Native NEAR is the only source-wallet integration and fees are not sponsored.
 
 ## What works
 
@@ -24,14 +26,14 @@ The demo walkthrough remains available. Live funding is a separate pilot: read i
 | --- | --- |
 | Invoice intelligence | PDF text extraction, English image OCR, editable fields and explicit recipient verification |
 | Security Shield | Explainable risk scores, duplicate checks, changed supplier wallets, suspicious instructions and URL heuristics |
-| Pay | Human-approved DUSD payments to approved registered suppliers; optional verified invoice binding |
+| Pay | Approved-supplier DUSD simulation plus a separate operator-gated native-NEAR-funded pilot |
 | Transfer and Receive | Account receive codes, recipient review, atomic debit/credit, named counterparties and received totals |
 | Receipts | Sender and receiver see the same reference, amount, recorded names and branded PDF |
 | Accounts | Supabase signup, confirmation, sign-in, recovery, private profiles and account-owned demo storage |
 | NEAR | Read-only mainnet balance, public wallet/transaction observations and a separate native NEAR testnet transfer lab |
 | NEAR Intents | Official token discovery, verified signed quotes and a gated native-NEAR-funded pilot with persistent approval/monitoring |
 | Assistant | Structured local payment proposals; optional authenticated model interface; no wallet execution tools |
-| Business tools | Supplier application/review, restricted administrator console, analytics, policies and private feedback |
+| Business tools | Shareable invoice checkout, live CSV/reporting, supplier review, restricted admin, policies and private feedback |
 
 New workspaces start empty. Examples load only when selected. Connecting a wallet does not sign you into AFRIPAY or create an email account's wallet.
 
@@ -114,7 +116,9 @@ In your Supabase SQL Editor, run these migrations in order:
 4. `supabase/demo-accounts-feedback.sql`
 5. `supabase/final-payments.sql` — **LAST**
 
-The final migration preserves existing balances, grant status and history. Do not rerun only an older ledger migration afterward. `supabase/schema.sql` is an unfinished production foundation, not a substitute for these prototype migrations.
+For the 0.8 live-link pilot also run `supabase/live-payment-links.sql` LAST; it includes the live table/function foundation.
+
+The demo final migration preserves existing balances, grant status and history. Do not rerun only an older ledger migration afterward. `supabase/schema.sql` is an unfinished production foundation, not a substitute for these prototype migrations.
 
 Private demo documents use row-level security and revision checks. They remain user-editable simulations. DUSD balance changes use restricted database functions with atomic journal entries and participant-only receipt access.
 
@@ -148,20 +152,20 @@ To update an existing deployment, commit the intended files and push to its conn
 
 ## Verification and limitations
 
-Version 0.7 release checks passed:
+Version 0.8 release checks passed:
 
-- **273 automated unit/API/security/embedded PostgreSQL tests**.
-- **84 desktop/mobile Chromium browser journeys**.
-- TypeScript, optimized production build and **40-route** production startup smoke.
+- **300 automated unit/API/security/embedded PostgreSQL tests**.
+- **98 desktop/mobile Chromium browser journeys**.
+- TypeScript, optimized production build and **41-route** production startup smoke.
 - Downloaded PDF rendering and visual inspection.
 
 Database tests execute actual migrations in embedded PostgreSQL. Account browser tests use the actual SDK against a mock service, not real inboxes. Mobile viewport emulation is not physical Safari or a wallet-app test. Prior read-only API checks observed a real testnet account and an existing public mainnet transaction; AFRIPAY did not initiate that transaction.
 
-Separately, the founder reported successful hosted account, two-account transfer/payment, matching balance/receipt, suspicious-invoice and recovery tests. These are human-reported checks, not automated proof of every production path. The 0.7 code update reran the release checks. Real hosted token discovery and a signature-verified indicative dry quote also succeeded on November 10; neither sent funds. See [verification details](docs/VERIFICATION.md).
+Separately, the founder reported successful hosted account, two-account transfer/payment, matching balance/receipt, suspicious-invoice and recovery tests. These are human-reported checks, not automated proof of every production path. The 0.8 code update reran the release checks. Real hosted token discovery and a signature-verified indicative dry quote also succeeded on November 10; neither sent funds. See [verification details](docs/VERIFICATION.md).
 
 Remaining limits:
 
-- The gated mainnet coordinator is implemented but not yet proven with a funded end-to-end swap. Live orders use separate references and never change DUSD invoice documents. Destination settlement is provider-confirmed, not independently decoded on every destination chain.
+- The gated mainnet coordinator is implemented but not yet proven with a funded end-to-end swap. Live orders use separate references and public invoice links, and never change DUSD invoice documents. Destination settlement is provider-confirmed, not independently decoded on every destination chain.
 - External malicious-address/phishing feeds and full historical flow analysis are not configured. Low heuristic risk is not a safety guarantee; a new wallet alone is not treated as a scam.
 - Scanned PDFs without a text layer need image upload or manual entry. English OCR can make mistakes. QR decoding, document signature verification and redirect inspection are not implemented; untrusted URLs are not automatically opened.
 - Demo documents/audits are editable, not production financial audit logs. DUSD has no redemption or cash value. No real FX valuation is provided.
@@ -207,7 +211,9 @@ flowchart LR
 
 - `components/`, `hooks/`, `app/globals.css`: workspace, shared ledger screens and responsive design.
 - `lib/security.ts`, `lib/invoice.ts`, `lib/assistant.ts`: evidence rules and structured extraction/proposals.
-- `app/api/live/` and `lib/live-server.ts`: authenticated, operator-gated mainnet coordinator. Other `app/api/` routes provide bounded integrations.
+- `app/api/live/` and `lib/live-server.ts`: guarded mainnet coordination and authenticated reporting.
+- `app/api/payment-requests/`, `lib/payment-request-server.ts`: explicit public invoices and bound checkout.
+- `supabase/live-payment-links.sql`: additive link binding and publication protections.
 - `supabase/`: account, supplier, workspace, credit and feedback migrations.
 - `tests/`: unit, API, security, database and browser checks.
 - `samples/`: invoice examples and a clearly labeled demo credit receipt.

@@ -4,7 +4,7 @@ import {validAddress} from './security';
 export const nativeAsset='nep141:wrap.near';
 export const mainnetAccount=z.string().min(2).max(64).regex(/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/).refine(v=>!v.endsWith('.testnet'),'Use a NEAR mainnet account.');
 export const liveHash=z.string().regex(/^[1-9A-HJ-NP-Za-km-z]{32,64}$/);
-export const liveInput=z.object({requestId:z.string().uuid(),sender:mainnetAccount,recipient:z.string().min(2).max(128),destinationAsset:z.string().min(1).max(200),destinationChain:z.enum(['near','eth','base','arb','polygon','bsc','optimism','sol']),amount:z.string().regex(/^\d+(?:\.\d{1,30})?$/).max(70),invoiceReference:z.string().trim().min(1).max(100),invoiceText:z.string().max(12000).default(''),recipientVerified:z.literal(true),slippage:z.number().int().min(1).max(100)}).strict();
+export const liveInput=z.object({requestId:z.string().uuid(),requestToken:z.string().regex(/^[a-f0-9]{64}$/).optional(),sender:mainnetAccount,recipient:z.string().min(2).max(128),destinationAsset:z.string().min(1).max(200),destinationChain:z.enum(['near','eth','base','arb','polygon','bsc','optimism','sol']),amount:z.string().regex(/^\d+(?:\.\d{1,30})?$/).max(70),invoiceReference:z.string().trim().min(1).max(100),invoiceText:z.string().max(12000).default(''),recipientVerified:z.literal(true),slippage:z.number().int().min(1).max(100)}).strict();
 export type LiveInput=z.infer<typeof liveInput>;
 export const supportedToken=z.object({assetId:z.string().max(200),symbol:z.string().max(30),blockchain:z.string().max(30),decimals:z.number().int().min(0).max(30),contractAddress:z.string().nullable().optional()}).passthrough();
 export type LiveToken=z.infer<typeof supportedToken>;

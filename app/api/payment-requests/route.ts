@@ -1,0 +1,6 @@
+import{z}from'zod';
+import{api,json,APIError}from'@/lib/server';
+import{liveUser,liveRpc}from'@/lib/live-server';
+import{publicRequestDb,requestRow,requestView,publishRequest}from'@/lib/payment-request-server';
+export async function GET(request:Request){return api(request,async()=>{const token=new URL(request.url).searchParams.get('token');if(token){const db=publicRequestDb();return {request:await requestView(db,await requestRow(db,token))};}const {user,db}=await liveUser(request);const {data,error}=await db.from('live_payment_requests').select('*').eq('owner_id',user).order('created_at',{ascending:false}).limit(50);if(error)throw new APIError('Install supabase/live-payment-links.sql to create invoice links.',503);return {requests:await Promise.all(data.map(async row=>({id:row.id,...await requestView(db,row)})))};});}
+export async function POST(request:Request){return api(request,async()=>{const{user,db}=await liveUser(request);const raw=await json(request);if(raw.action==='create'){const{action,...input}=raw;return {request:await publishRequest(db,user,input)};}const input=z.object({action:z.literal('cancel'),id:z.string().uuid()}).strict().parse(raw);await liveRpc(db,'afripay_cancel_payment_request',{p_user:user,p_id:input.id});return {cancelled:true};});}

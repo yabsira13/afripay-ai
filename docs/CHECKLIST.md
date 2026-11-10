@@ -202,3 +202,19 @@ No email, mainnet transaction, repository publication, deployment or hackathon s
 - [ ] Explicitly reviewed and wallet-authorized tiny mainnet pilot
 - [ ] Actual funded success, destination receipt and failure/refund verification
 - [ ] Record true end-to-end demo and finish approved hackathon submission
+
+## Version 0.8 review fixes
+
+- [x] Public, explicitly published invoice page with immutable destination and amount
+- [x] Payer sign-in/review continuation; verification stays unchecked
+- [x] Server/SQL request binding; second payer/changed details rejected
+- [x] Safe cancellation of uncommitted request only; verified PAID projection
+- [x] Dedicated live history with authenticated, paginated CSV and safe explorer links
+- [x] Live Security Shield, plain-English observations, private risk evidence
+- [x] Live analytics with verified principal and separate asset totals
+- [x] Opt-in guided invoice demo; no forced samples in new accounts
+- [x] 300 automated tests; 98 browser journeys; production build and 41-route smoke
+- [x] Real read-only testnet wallet and recent existing mainnet transaction observed
+- [ ] Founder installs 0.8 SQL, deploys and verifies private reports/public links
+- [ ] Explicitly approved actual mainnet invoice payment and settlement/receipt proof
+- [ ] Funded end-to-end video/X post and approved final hackathon submission

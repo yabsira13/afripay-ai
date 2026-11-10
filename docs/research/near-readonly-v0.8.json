@@ -1,0 +1,59 @@
+{
+  "notice": "Read-only public NEAR observations. The mainnet transaction existed before this test and was NOT sent by AFRIPAY. No wallet was signed or funded. This does not prove an AFRIPAY invoice settlement.",
+  "checks": {
+    "wallet": {
+      "http": 200,
+      "data": {
+        "mode": "live",
+        "readOnly": true,
+        "network": "testnet",
+        "accountId": "faucet.testnet",
+        "balance": "31.732180734469354699999998",
+        "locked": "0",
+        "asset": "NEAR",
+        "blockHeight": 277042535,
+        "blockHash": "9rna6Wuu5UaLQ6et27qa4g9TqYs3qdwi7HGe59ETN9HA",
+        "storageBytes": 264,
+        "provider": "https://test.rpc.fastnear.com",
+        "checkedAt": "2026-11-10T08:24:56.151Z",
+        "evidence": [
+          {
+            "source": "observation",
+            "reason": "Account state was retrieved at finality from the selected NEAR network."
+          },
+          {
+            "source": "unknown",
+            "reason": "No external scam intelligence or historical movement analysis was performed. Account activity alone does not establish safety or maliciousness."
+          }
+        ]
+      }
+    },
+    "transaction": {
+      "http": 503,
+      "error": "{\"error\":\"NEAR provider is unavailable. No simulated data was substituted.\"}"
+    },
+    "recent_transaction": {
+      "http": 200,
+      "data": {
+        "mode": "live",
+        "readOnly": true,
+        "network": "mainnet",
+        "hash": "FgeMYMNoiRZi6H7LXE7Rtb7gt3P8zP8yrMvnWLANE75H",
+        "sender": "0here.tg",
+        "recipient": "jonesthomasml578-hot1.tg",
+        "status": "confirmed",
+        "actions": [
+          "Delegate"
+        ],
+        "nativeTransferAmount": "0",
+        "asset": "NEAR",
+        "finalExecution": "FINAL",
+        "blockHash": "JAcdtyxZ49Lok2qFj6P1YbAEiFi3vsKoCJreUjGtyxCm",
+        "notice": "Final successful execution was observed. This does not establish that the recipient or invoice is legitimate.",
+        "provider": "https://free.rpc.fastnear.com",
+        "checkedAt": "2026-11-10T08:28:02.816Z"
+      },
+      "notice": "An existing public transaction found in a finalized block; NOT initiated by AFRIPAY."
+    }
+  }
+}
