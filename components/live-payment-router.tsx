@@ -1,0 +1,5 @@
+'use client';
+import {useEffect,useState} from 'react';
+import LivePayments from './live-payments';
+import BscPayments from './bsc-payments';
+export default function LivePaymentRouter(props:React.ComponentProps<typeof LivePayments>){const [source,setSource]=useState('near');useEffect(()=>{if(sessionStorage.getItem('afripay-live-source')==='bsc')setSource('bsc');},[]);return <><section className="card padded" style={{marginBottom:24}}><label className="field">Sending network<select value={source} onChange={e=>{setSource(e.target.value);sessionStorage.setItem('afripay-live-source',e.target.value);}}><option value="near">NEAR mainnet · NEAR wallet</option><option value="bsc">BSC mainnet · compatible EVM wallet</option></select></label><p className="fine">Choose the network holding your funds. Your wallet must approve on this sending network. Switching this selector never sends a payment.</p></section>{source==='near'?<LivePayments {...props}/>:<BscPayments userId={props.userId} onSignIn={props.onSignIn} historyOnly={props.historyOnly}/>}</>;}

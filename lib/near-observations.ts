@@ -7,7 +7,7 @@ export const lookupAccount=z.string().min(2).max(64).regex(/^[a-z0-9]+(?:[._-][a
 export const lookupHash=z.string().regex(/^[1-9A-HJ-NP-Za-km-z]{32,64}$/);
 const endpoints={mainnet:['https://free.rpc.fastnear.com','https://near.drpc.org'],testnet:['https://test.rpc.fastnear.com','https://near-testnet.drpc.org']};
 export function validateLookupAccount(account:string,network:NearNetwork){lookupAccount.parse(account);if(network==='mainnet'&&account.endsWith('.testnet'))throw new APIError('Choose testnet for a .testnet account.');if(network==='testnet'&&!account.endsWith('.testnet')&&!/^[a-f0-9]{64}$/.test(account))throw new APIError('Use a .testnet account or implicit testnet account with this network.');}
-async function rpc(network:NearNetwork,method:'query'|'EXPERIMENTAL_tx_status',params:unknown){
+async function rpc(network:NearNetwork,method:'query'|'EXPERIMENTAL_tx_status'|'block',params:unknown){
  for(const provider of endpoints[network]){try{const response=await fetch(provider,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:'afripay-read-only',method,params}),signal:AbortSignal.timeout(8000),cache:'no-store'});if(!response.ok)continue;const body=await response.json();const cause=body.error?.cause?.name;if(cause==='UNKNOWN_ACCOUNT')throw new APIError('Account was not found on the selected network.',404);if(cause==='UNKNOWN_TRANSACTION'||cause==='TIMEOUT_ERROR')return {result:null,provider};if(body.result)return {result:body.result,provider};}catch(error){if(error instanceof APIError)throw error;}}
  throw new APIError('NEAR provider is unavailable. No simulated data was substituted.',503);
 }

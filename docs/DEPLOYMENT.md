@@ -67,3 +67,7 @@ No public repository or hosted site was published during this update. Local succ
 ## Real-payment pilot configuration
 
 Read [RELEASE-0.7.md](RELEASE-0.7.md) before enabling. Install `supabase/live-payments.sql` separately, keep `SUPABASE_SERVICE_ROLE_KEY` server-only, start `LIVE_PAYMENTS_ENABLED=false`, and verify settings before choosing to enable wallet requests. Monitoring remains available when new funding is disabled. The 0.7 pilot has automated coverage but needs actual hosted and funded wallet testing.
+
+### Upgrading to 0.9.4
+
+After the existing mainnet payment-link foundation, run the complete atomic `supabase/mainnet-transfers.sql` migration in SQL Editor, then deploy 0.9.4. Do not rerun older mainnet migrations afterward. No new secret is required. This adds native NEAR and direct BSC invoice/order handling while preserving records. Existing mainnet funding flags and Supabase server credentials still apply. See [release instructions](RELEASE-0.9.4.md) for wallet support, caps and post-deploy checks. Funded mainnet end-to-end acceptance has not been performed by the development assistant.

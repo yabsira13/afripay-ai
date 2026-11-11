@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-11",
+  "type": "read-only RPC metadata observations; no payment",
+  "chainId": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x38"
+  },
+  "usdtDecimals": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": "0x0000000000000000000000000000000000000000000000000000000000000012"
+  },
+  "contract": "0x55d398326f99059ff775485246999027b3197955",
+  "limitations": "Metadata only. No wallet signing, funded transfer or settlement was performed."
+}

@@ -1,0 +1,23 @@
+import {z} from 'zod';
+import {toAtomic} from './amount';
+export const bscAddress=z.string().regex(/^0x[a-fA-F0-9]{40}$/).refine(v=>!/^0x0{40}$/i.test(v),'Use a nonzero BSC address.');
+export const bscHash=z.string().regex(/^0x[a-fA-F0-9]{64}$/);
+export const bscTokens=[{symbol:'USDT',assetId:'nep141:bnb-0x55d398326f99059ff775485246999027b3197955.omdep.near',contractAddress:'0x55d398326f99059ff775485246999027b3197955',decimals:18,blockchain:'bsc'},{symbol:'USDC',assetId:'nep141:bnb-0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d.omdep.near',contractAddress:'0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',decimals:18,blockchain:'bsc'}] as const;
+export const bscInput=z.object({requestId:z.uuid(),requestToken:z.string().regex(/^[a-f0-9]{64}$/).optional(),sender:bscAddress,recipient:bscAddress,destinationAsset:z.string(),amount:z.string().regex(/^\d+(?:\.\d+)?$/).max(70),invoiceReference:z.string().trim().min(1).max(100),invoiceText:z.string().max(2000).default(''),recipientVerified:z.literal(true)}).strict();
+export function bscToken(asset:string){const token=bscTokens.find(t=>t.assetId===asset);if(!token)throw new Error('Direct BSC payments support the listed USDT and USDC contracts only.');return token;}
+export function bscTransferData(recipient:string,atomic:string){bscAddress.parse(recipient);if(!/^[1-9]\d*$/.test(atomic)||BigInt(atomic)>=2n**256n)throw new Error('Invalid token amount.');return '0xa9059cbb'+recipient.slice(2).toLowerCase().padStart(64,'0')+BigInt(atomic).toString(16).padStart(64,'0');}
+export function prepareBsc(raw:unknown){const input=bscInput.parse(raw),token=bscToken(input.destinationAsset),atomic=toAtomic(input.amount,token.decimals);if(input.recipient.toLowerCase()===token.contractAddress)throw new Error('Enter the receiving wallet address, not the token contract.');if(input.sender.toLowerCase()===input.recipient.toLowerCase())throw new Error('Choose a different BSC recipient.');if(BigInt(atomic)>10n*10n**18n)throw new Error('BSC direct payments are limited to 10 tokens per payment.');return {input,token,atomic,walletRequest:{chainId:'0x38',from:input.sender,to:token.contractAddress,value:'0x0',data:bscTransferData(input.recipient,atomic)}};}
+const transferTopic='0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+export function inspectBsc(tx:any,receipt:any,header:any,tip:string,order:any){
+ const {input,token,atomic,walletRequest}=prepareBsc(order.input);const hash=bscHash.parse(order.funding_hash).toLowerCase();
+ if(!tx||!receipt)return {state:'SUBMITTED',verified:false};
+ if(tx.hash?.toLowerCase()!==hash||receipt.transactionHash?.toLowerCase()!==hash||tx.from?.toLowerCase()!==input.sender.toLowerCase()||tx.to?.toLowerCase()!==token.contractAddress||!/^0x[0-9a-f]+$/i.test(tx.value)||BigInt(tx.value)!==0n||tx.input?.toLowerCase()!==walletRequest.data||tx.chainId&&BigInt(tx.chainId)!==56n)throw new Error('BSC transaction differs from the reviewed token transfer.');
+ if(!['0x0','0x1'].includes(receipt.status)||!receipt.blockNumber)return {state:'SUBMITTED',verified:false};
+ if(header?.hash!==receipt.blockHash||tx.blockHash!==receipt.blockHash||tx.blockNumber!==receipt.blockNumber||header.number!==receipt.blockNumber)throw new Error('BSC execution block evidence does not match.');
+ if(!/^0x[0-9a-f]+$/i.test(tip)||!/^0x[0-9a-f]+$/i.test(header.timestamp)||BigInt(receipt.blockNumber)<=BigInt(order.review.minBlock)||BigInt(header.timestamp)*1000n<BigInt(Date.parse(order.created_at)-1000))throw new Error('BSC transfer predates this payment review.');
+ const confirmations=BigInt(tip)-BigInt(receipt.blockNumber)+1n;if(confirmations<12n)return {state:'SUBMITTED',verified:false,confirmations:Number(confirmations>0n?confirmations:0n)};
+ if(receipt.status==='0x0')return {state:'FAILED',verified:false,confirmations:Number(confirmations)};
+ const sender='0x'+input.sender.slice(2).toLowerCase().padStart(64,'0'),receiver='0x'+input.recipient.slice(2).toLowerCase().padStart(64,'0');
+ if(!Array.isArray(receipt.logs)||!receipt.logs.some((log:any)=>log.transactionHash?.toLowerCase()===hash&&log.blockHash===receipt.blockHash&&log.address?.toLowerCase()===token.contractAddress&&log.topics?.length===3&&log.topics[0]?.toLowerCase()===transferTopic&&log.topics[1]?.toLowerCase()===sender&&log.topics[2]?.toLowerCase()===receiver&&/^0x[a-f0-9]{64}$/i.test(log.data)&&BigInt(log.data)===BigInt(atomic)&&!log.removed))throw new Error('Matching BSC token Transfer receipt is missing.');
+ return {state:'SUCCESS',verified:true,confirmations:Number(confirmations),hash,amountOut:atomic,blockNumber:receipt.blockNumber};
+}

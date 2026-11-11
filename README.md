@@ -4,11 +4,11 @@
 
 AFRIPAY AI helps African businesses review invoices, spot changed payment destinations and approve payments with clear risk explanations. Built for NEAR HACKATHON 2026.
 
-[Live demo](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **Version 0.9.3**
+[Live demo](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **Version 0.9.4**
 
-**Payment status:** DUSD is simulated. The founder demonstrated a paid testnet invoice, and its 0.01 test NEAR transfer was independently confirmed through public RPC. [View the transaction](https://testnet.nearblocks.io/txns/55jZE7gnpLRzhUySa2NtqxMRp6PuxfqFcWhzmECiHWGa). The operator-gated mainnet Intents pilot also needs a funded end-to-end demonstration. Neither gas sponsorship nor unrestricted source-chain wallets is implemented.
+**Payment status:** DUSD is simulated. The founder demonstrated a paid testnet invoice, and its 0.01 test NEAR transfer was independently confirmed through public RPC. [View the transaction](https://testnet.nearblocks.io/txns/55jZE7gnpLRzhUySa2NtqxMRp6PuxfqFcWhzmECiHWGa). Native NEAR mainnet transfers, direct BSC USDT/USDC transfers and the operator-gated Intents pilot need funded end-to-end demonstrations. Gas sponsorship and arbitrary source-chain wallets are not implemented.
 
-Wallet sessions now persist across AFRIPAY pages and idle time, with explicit disconnect/logout controls. Testnet transactions have All/Sent/Received filters; compact invoice rows open into details. Mainnet tools display their actual funding availability and retain per-payment wallet approval.
+Token menus show clean coin names and separate networks. Native NEAR transfers use a NEAR wallet; direct BSC USDT/USDC uses a compatible EVM wallet on chain 56. NEAR-funded cross-chain payments still require NEAR approval. Every payment requires wallet approval. [Install 0.9.4, including its required Supabase migration](docs/RELEASE-0.9.4.md).
 
 ## Try it in two minutes
 
@@ -28,7 +28,7 @@ For the blockchain flow, choose **NEAR testnet**: create an invoice in **Invoice
 | DUSD payments and PDF receipts | Simulated account-to-account credits; no cash value |
 | NEAR account and transaction checks | Real public RPC observations; unavailable evidence stays unavailable |
 | Saved testnet invoices | Wallet-approved native transfers, final execution checks, sent/received activity, explorer links and PDF invoices/receipts |
-| Mainnet invoice links and Intents | Public invoice checkout and guarded funding/monitoring pilot; funded end-to-end proof pending |
+| Mainnet payments and invoice links | Native NEAR, direct BSC USDT/USDC and guarded NEAR-funded Intents; final proof required for receipts; funded end-to-end proof pending |
 | Reporting | Authenticated live-order CSV and per-asset analytics; no invented USD valuation |
 | AI assistant | Local structured proposals, optional model integration; AI cannot sign or approve payments |
 
@@ -45,13 +45,13 @@ Open the local URL printed by Next.js. Guest exploration needs no credentials.
 
 For accounts, copy `.env.example` to `.env.local`, configure your Supabase public URL/key, install the [database migrations and authentication settings](docs/PROJECT-GUIDE.md#configure-accounts), and configure SMTP. Testnet invoices/activity additionally require `supabase/testnet-invoices.sql`, `supabase/testnet-activity.sql` and the server-only `SUPABASE_SERVICE_ROLE_KEY`. Keep secrets out of Git and `NEXT_PUBLIC_` variables.
 
-Existing installation? Follow the [0.9.3 wallet and design update](docs/RELEASE-0.9.3.md) and [0.9 setup instructions](docs/RELEASE-0.9.md). Mainnet funding is disabled by default and requires separate operator configuration.
+Existing installation? Follow the [0.9.4 payment update and required SQL migration](docs/RELEASE-0.9.4.md) and [0.9 setup instructions](docs/RELEASE-0.9.md). Mainnet funding is disabled by default and requires separate operator configuration.
 
 ## Verification
 
-**352 automated tests**, **122 desktop/mobile browser checks**, TypeScript, production build and a **41-route smoke check** passed for 0.9.3.
+**373 automated tests**, **130 desktop/mobile browser checks**, TypeScript, the production build and a **41-route smoke check** passed for 0.9.4. Tests cover database authorization, payment locking, exact transfers and settlement proof checks.
 
-Browser and RPC fixtures do not prove an actual blockchain transfer or email delivery. See [verification evidence and limits](docs/VERIFICATION-0.9.3.md).
+Browser and RPC fixtures do not prove an actual blockchain transfer or email delivery. See [verification evidence and limits](docs/VERIFICATION-0.9.4.md).
 
 ```sh
 npm test
