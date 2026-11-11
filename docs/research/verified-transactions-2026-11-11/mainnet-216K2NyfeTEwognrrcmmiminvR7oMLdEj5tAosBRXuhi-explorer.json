@@ -1,0 +1,48 @@
+{
+  "endpoint": "https://api.nearblocks.io/v1/txns/216K2NyfeTEwognrrcmmiminvR7oMLdEj5tAosBRXuhi",
+  "response": {
+    "txns": [
+      {
+        "transaction_hash": "216K2NyfeTEwognrrcmmiminvR7oMLdEj5tAosBRXuhi",
+        "included_in_block_hash": "TKDNcaQbqJ1GGDLZd4AJj4CmffgNvdWcnyqEMCMZGJs",
+        "block_timestamp": "1794395907789005537",
+        "signer_account_id": "yabsera13.near",
+        "receiver_account_id": "afripayai.near",
+        "receipt_conversion_gas_burnt": "223182562500",
+        "receipt_conversion_tokens_burnt": "22318256250000000000",
+        "shard_id": "13",
+        "block": {
+          "block_height": 224058100
+        },
+        "actions": [
+          {
+            "action": "TRANSFER",
+            "method": null,
+            "args": null
+          }
+        ],
+        "actions_agg": {
+          "deposit": 1e+22,
+          "gas_attached": 0
+        },
+        "outcomes": {
+          "status": true
+        },
+        "outcomes_agg": {
+          "transaction_fee": 44636512500000000000,
+          "gas_used": 669547687500
+        },
+        "receipts": [
+          {
+            "fts": [],
+            "nfts": []
+          },
+          {
+            "fts": [],
+            "nfts": []
+          }
+        ]
+      }
+    ]
+  }
+}

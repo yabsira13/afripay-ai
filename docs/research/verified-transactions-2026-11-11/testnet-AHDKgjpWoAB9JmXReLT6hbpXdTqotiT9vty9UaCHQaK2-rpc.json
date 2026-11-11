@@ -1,0 +1,157 @@
+{
+  "provider": "https://test.rpc.fastnear.com",
+  "observedAt": "2026-11-11T12:51:50.678457+00:00",
+  "response": {
+    "jsonrpc": "2.0",
+    "result": {
+      "final_execution_status": "FINAL",
+      "receipts": [
+        {
+          "predecessor_id": "alephai.testnet",
+          "priority": 0,
+          "receipt": {
+            "Action": {
+              "actions": [
+                {
+                  "Transfer": {
+                    "deposit": "10000000000000000000000"
+                  }
+                }
+              ],
+              "gas_price": "1000000000",
+              "input_data_ids": [],
+              "is_promise_yield": false,
+              "output_data_receivers": [],
+              "signer_id": "alephai.testnet",
+              "signer_public_key": "ed25519:FH8HFAHHj9tJHpGNDWnXtnd91dp26XeLUE8sukKbQKap"
+            }
+          },
+          "receipt_id": "JCxFXAtcivWvAEHSfzpBRPZNM7NKTsUMzZ5KWt1Rhfqv",
+          "receiver_id": "afripayai.testnet"
+        },
+        {
+          "predecessor_id": "system",
+          "priority": 0,
+          "receipt": {
+            "Action": {
+              "actions": [
+                {
+                  "Transfer": {
+                    "deposit": "200864306250000000000"
+                  }
+                }
+              ],
+              "gas_price": "0",
+              "input_data_ids": [],
+              "is_promise_yield": false,
+              "output_data_receivers": [],
+              "signer_id": "alephai.testnet",
+              "signer_public_key": "ed25519:FH8HFAHHj9tJHpGNDWnXtnd91dp26XeLUE8sukKbQKap"
+            }
+          },
+          "receipt_id": "F8599Zxr8kZfFHz6HByW2FyJ8551hwgKjMhm2bm6BnUg",
+          "receiver_id": "alephai.testnet"
+        }
+      ],
+      "receipts_outcome": [
+        {
+          "block_hash": "4fTHXnaajg89DNS5M34ck8dZ3BA2TiShkQK7Dwq4xUoB",
+          "id": "JCxFXAtcivWvAEHSfzpBRPZNM7NKTsUMzZ5KWt1Rhfqv",
+          "outcome": {
+            "executor_id": "afripayai.testnet",
+            "gas_burnt": 223182562500,
+            "logs": [],
+            "metadata": {
+              "contracts": [
+                null
+              ],
+              "gas_profile": [],
+              "version": 4
+            },
+            "receipt_ids": [
+              "F8599Zxr8kZfFHz6HByW2FyJ8551hwgKjMhm2bm6BnUg"
+            ],
+            "status": {
+              "SuccessValue": ""
+            },
+            "tokens_burnt": "22318256250000000000"
+          },
+          "proof": [
+            {
+              "direction": "Left",
+              "hash": "Aikxj7SN3WopfgjQv3p1S2fQQXWtTfRZueqGLHDZnVPV"
+            }
+          ]
+        },
+        {
+          "block_hash": "Ggefyq2v987ZKbQ9zC22sH8LxrycLUpRqdXm7kEbHTGN",
+          "id": "F8599Zxr8kZfFHz6HByW2FyJ8551hwgKjMhm2bm6BnUg",
+          "outcome": {
+            "executor_id": "alephai.testnet",
+            "gas_burnt": 223182562500,
+            "logs": [],
+            "metadata": {
+              "contracts": [
+                null
+              ],
+              "gas_profile": [],
+              "version": 4
+            },
+            "receipt_ids": [],
+            "status": {
+              "SuccessValue": ""
+            },
+            "tokens_burnt": "0"
+          },
+          "proof": [
+            {
+              "direction": "Left",
+              "hash": "85PhQpehs5N2wZvCLh8iuf6vGJ9sKWgRCv634j4Z1ckZ"
+            }
+          ]
+        }
+      ],
+      "status": {
+        "SuccessValue": ""
+      },
+      "transaction": {
+        "actions": [
+          {
+            "Transfer": {
+              "deposit": "10000000000000000000000"
+            }
+          }
+        ],
+        "hash": "AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2",
+        "nonce": 277067405000002,
+        "priority_fee": 0,
+        "public_key": "ed25519:FH8HFAHHj9tJHpGNDWnXtnd91dp26XeLUE8sukKbQKap",
+        "receiver_id": "afripayai.testnet",
+        "signature": "ed25519:q6ZfduNkrMRtRna95y9hyiD9pmmwa8qZQB2GYEYSpAbimKrs7hADdLmiqJCbQmwHkiJg78JudH5LXFvDKJwpEL9",
+        "signer_id": "alephai.testnet"
+      },
+      "transaction_outcome": {
+        "block_hash": "5fdVZf1GDiXNafRjrGgw9uQvSAQebVfzzCki9QHmJia6",
+        "id": "AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2",
+        "outcome": {
+          "executor_id": "alephai.testnet",
+          "gas_burnt": 223182562500,
+          "logs": [],
+          "metadata": {
+            "gas_profile": null,
+            "version": 1
+          },
+          "receipt_ids": [
+            "JCxFXAtcivWvAEHSfzpBRPZNM7NKTsUMzZ5KWt1Rhfqv"
+          ],
+          "status": {
+            "SuccessReceiptId": "JCxFXAtcivWvAEHSfzpBRPZNM7NKTsUMzZ5KWt1Rhfqv"
+          },
+          "tokens_burnt": "22318256250000000000"
+        },
+        "proof": []
+      }
+    },
+    "id": "afripay-proof"
+  }
+}

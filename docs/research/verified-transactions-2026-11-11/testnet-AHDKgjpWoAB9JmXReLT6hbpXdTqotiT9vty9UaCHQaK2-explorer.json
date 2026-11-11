@@ -1,0 +1,42 @@
+{
+  "endpoint": "https://api-testnet.nearblocks.io/v3/txns/AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2",
+  "response": {
+    "data": {
+      "actions": [
+        {
+          "action": "TRANSFER",
+          "method": null,
+          "args": {
+            "deposit": "10000000000000000000000"
+          },
+          "rlp_hash": null
+        }
+      ],
+      "actions_agg": {
+        "deposit": "10000000000000000000000",
+        "gas_attached": "0"
+      },
+      "block": {
+        "block_hash": "5fdVZf1GDiXNafRjrGgw9uQvSAQebVfzzCki9QHmJia6",
+        "block_height": "277216925",
+        "block_timestamp": "1794400987626612458"
+      },
+      "block_timestamp": "1794400987626612458",
+      "index_in_chunk": 0,
+      "outcomes": {
+        "status": true,
+        "status_key": "SUCCESS_VALUE"
+      },
+      "outcomes_agg": {
+        "gas_used": "669547687500",
+        "transaction_fee": "44636512500000000000"
+      },
+      "receipt_conversion_gas_burnt": "223182562500",
+      "receipt_conversion_tokens_burnt": "22318256250000000000",
+      "receiver_account_id": "afripayai.testnet",
+      "shard_id": 11,
+      "signer_account_id": "alephai.testnet",
+      "transaction_hash": "AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2"
+    }
+  }
+}

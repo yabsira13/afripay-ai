@@ -2,35 +2,59 @@
 
 **Intelligent payments. Borderless business.**
 
-AFRIPAY AI helps African businesses review invoices, spot changed payment destinations and approve payments with clear risk explanations. Built for NEAR HACKATHON 2026.
+An invoice and payments workspace for African businesses: review supplier bills, deliver invoices inside AFRIPAY, approve payments in your wallet and track verified settlement.
 
-[Live demo](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **Version 0.9.5**
+[Live app](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **v0.9.5 + invoice inbox patches**
 
-**Payment status:** DUSD is simulated. The founder demonstrated a paid testnet invoice, and its 0.01 test NEAR transfer was independently confirmed through public RPC. [View the transaction](https://testnet.nearblocks.io/txns/55jZE7gnpLRzhUySa2NtqxMRp6PuxfqFcWhzmECiHWGa). Native NEAR mainnet transfers, direct BSC USDT/USDC transfers and the operator-gated Intents pilot need funded end-to-end demonstrations. Gas sponsorship and arbitrary source-chain wallets are not implemented.
+## Try it
 
-Mainnet Overview now uses real balance and activity cards. Direct NEAR transfers appear in both sender and receiver history, with exact totals and explorer links. Mainnet and testnet suppliers register separately and need administrator review. [Install 0.9.5 and its required supplier SQL](docs/RELEASE-0.9.5.md).
+**Without funds:** open the app in **Demo**, choose **Try guided invoice demo**, extract the sample fields and inspect the security report. DUSD transfers are simulated credits with no cash value; account records and transfers require sign-in.
 
-## Try it in two minutes
+**With test tokens:** choose **NEAR testnet**, connect a testnet wallet, create/pay an invoice and open its transaction and PDF receipt. [Testnet walkthrough](docs/RELEASE-0.9.md).
 
-1. Open the [demo](https://afripay-ai.vercel.app/) and choose **Try guided invoice demo**.
-2. Click **Extract fields**, review the sample recipient and save the invoice to see its security checks.
-3. Try a suspicious sample to inspect changed-wallet and unsafe-instruction warnings.
-4. Sign in to explore simulated payments, transaction receipts and account-owned records. No real funds are needed for the DUSD demo.
+**Mainnet business flow:**
 
-For the blockchain flow, choose **NEAR testnet**: create an invoice in **Invoices**, pay it in **Pay**, and check **Transactions** or **Receive** for verified activity and PDF receipts. Follow the [testnet walkthrough](docs/RELEASE-0.9.md) for setup and recovery.
+1. Register your mainnet business and complete administrator review.
+2. Create an invoice, choose another approved business and send it to their AFRIPAY inbox. No link needs to be sent.
+3. The payer reviews the locked invoice details and approves in their wallet.
+4. Verified settlement changes the invoice to **Paid**, with notifications, explorer references and PDFs for the participants.
 
-## What works—and what it proves
+Uploading a supplier bill is a separate **Upload → Extract → Check → Review payment** flow. Creating an invoice requests payment **to you**; paying a supplier sends funds **to them**.
 
-| Feature | Current status |
-| --- | --- |
-| Invoice intelligence | PDF text extraction, English image OCR and editable fields |
-| Security Shield | Explainable checks for changed wallets, duplicates and suspicious instructions; not a safety guarantee |
-| DUSD payments and PDF receipts | Simulated account-to-account credits; no cash value |
-| NEAR account and transaction checks | Real public RPC observations; unavailable evidence stays unavailable |
-| Saved testnet invoices | Wallet-approved native transfers, final execution checks, sent/received activity, explorer links and PDF invoices/receipts |
-| Mainnet payments and invoice links | Native NEAR, direct BSC USDT/USDC and guarded NEAR-funded Intents; final proof required for receipts; funded end-to-end proof pending |
-| Reporting | Authenticated live-order CSV and per-asset analytics; no invented USD valuation |
-| AI assistant | Local structured proposals, optional model integration; AI cannot sign or approve payments |
+## Features
+
+- **Invoice intelligence:** PDF text, English image OCR, editable fields and explicit recipient confirmation. Changing the document clears its previous review.
+- **Security Shield:** explains changed destinations, repeated invoice references and suspicious instructions. It does not certify identity or guarantee safety.
+- **Business inbox and supplier dashboard:** private received/issued invoices, registered-business selection, optional links and status updates.
+- **Payment activity:** tracked sent/received native NEAR transfers, payment/invoice notifications, PDF invoices and receipts, and NEAR-order CSV export. BSC history is separate.
+- **AI assistant:** local structured proposals and optional configured model integration. AI cannot approve or sign a payment.
+
+## Payment modes and evidence
+
+| Mode | Behavior | Evidence |
+| --- | --- | --- |
+| Demo | Account-to-account DUSD test credits | Simulation only |
+| NEAR testnet | Wallet-approved native test NEAR; final execution checks | Transfers independently verified in both directions; see the links below |
+| Native NEAR mainnet | Direct NEAR transfers, invoices and verified receipts | Two founder-supplied native transfers independently verified as final and successful; see below |
+| Direct BSC | Exact Binance-Peg USDT/USDC transfers through a compatible EVM wallet on chain 56 | Implementation and fixture tests; funded acceptance pending |
+| NEAR-funded Intents | Native NEAR funding to supported destination assets/networks | Live asset discovery checked; funded cross-chain acceptance pending |
+
+The **sending** network determines wallet approval. NEAR-funded cross-chain payments are approved on NEAR; direct BSC transfers require a BSC wallet and BNB for fees. Every payment needs explicit wallet approval. No gas sponsorship or arbitrary source-network support is claimed.
+
+Tracked wallet activity covers AFRIPAY-verified records, not every external transfer. Different assets are not combined into an invented USD balance. Optional model availability and private deployed inboxes were not independently exercised during the anonymous live review. The reviewer did not sign a transaction.
+
+## Verified transactions
+
+All four founder-supplied records below were independently checked against NEAR RPC final execution, successful receipt outcomes and matching explorer/block records on **11 November 2026**.
+
+| Network | Amount | Sender → recipient | Explorer |
+| --- | --- | --- | --- |
+| NEAR mainnet | 0.01 NEAR | `yabsera13.near` → `afripayai.near` | [Mainnet 1](https://nearblocks.io/txns/GpeBUtrjjwn2ZzbXHxK5hFqkMK6mrgYegSMkq57xKrc6) |
+| NEAR mainnet | 0.01 NEAR | `yabsera13.near` → `afripayai.near` | [Mainnet 2](https://nearblocks.io/txns/216K2NyfeTEwognrrcmmiminvR7oMLdEj5tAosBRXuhi) |
+| NEAR testnet | 0.01 test NEAR | `afripayai.testnet` → `alephai.testnet` | [Testnet 1](https://testnet.nearblocks.io/txns/95t7HKvGZnrYFUR5k3cG1ZCokLnjDjrJPz5ATVb6xMEv) |
+| NEAR testnet | 0.01 test NEAR | `alephai.testnet` → `afripayai.testnet` | [Testnet 2](https://testnet.nearblocks.io/txns/AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2) |
+
+These establish successful **native NEAR transfers**. They do not establish BSC/Intents execution or independently prove private invoice linkage. [Verification details and saved public evidence](docs/VERIFIED-TRANSACTIONS.md).
 
 ## Run locally
 
@@ -41,28 +65,29 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Next.js. Guest exploration needs no credentials.
+Guest demo exploration needs no credentials. For accounts, copy `.env.example` to `.env.local` and configure Supabase. Private invoice/testnet services require the server-only `SUPABASE_SERVICE_ROLE_KEY`; mainnet funding is off by default through `LIVE_PAYMENTS_ENABLED=false`.
 
-For accounts, copy `.env.example` to `.env.local`, configure your Supabase public URL/key, install the [database migrations and authentication settings](docs/PROJECT-GUIDE.md#configure-accounts), and configure SMTP. Testnet invoices/activity additionally require `supabase/testnet-invoices.sql`, `supabase/testnet-activity.sql` and the server-only `SUPABASE_SERVICE_ROLE_KEY`. Keep secrets out of Git and `NEXT_PUBLIC_` variables.
-
-Existing installation? Follow the [0.9.5 received-history, dashboard and supplier update](docs/RELEASE-0.9.5.md) and [0.9 setup instructions](docs/RELEASE-0.9.md). Mainnet funding is disabled by default and requires separate operator configuration.
+Follow the [current setup and migration order](docs/SETUP.md). Existing installations should use the [focused invoice/payment patch guide](docs/patches/PAYMENTS-AND-INVOICE-INBOX.md). Keep `.env.local` out of Git and server credentials out of `NEXT_PUBLIC_` variables.
 
 ## Verification
 
-**388 automated tests** pass for 0.9.5, including authorization, payment proof, shared receiver history, exact chart totals and network supplier moderation. The 142-check browser regression, 14 final focused desktop/mobile checks, production build and 41-route smoke check also passed.
+On **11 November 2026**, **408 automated tests** and TypeScript passed. The latest feature validation also passed **154 desktop/mobile regression checks**, 8 final document-review checks, the production build and a **44-route smoke check**.
 
-Browser and RPC fixtures do not prove an actual blockchain transfer or email delivery. See [verification evidence and limits](docs/VERIFICATION-0.9.5.md).
+The live review confirmed the new entry screens, guest extraction, public token discovery and authentication barriers, with no JavaScript errors or horizontal overflow in the tested desktop/mobile views. Private and funded flows have a different evidence boundary: [review findings and limits](docs/reviews/REVIEW-2026-11-11.md).
 
 ```sh
+npm run typecheck
 npm test
 npm run build
 npm run test:smoke
 ```
 
-## Documentation
+Browser tests use `npm run test:e2e` against a running app. [Setup details](docs/SETUP.md#verification).
 
-[Detailed guide](docs/PROJECT-GUIDE.md) · [Deployment](docs/DEPLOYMENT.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md) · [Submission checklist](docs/HACKATHON.md)
+## Project
 
-Built with Next.js, React, TypeScript, Supabase, NEAR Connect and the official NEAR Intents 1Click SDK. Developed with AI assistance; dependencies and hackathon disclosures are in the detailed guide.
+Next.js · React · TypeScript · Supabase · NEAR Connect · official NEAR Intents 1Click SDK · pdf-lib · PDF.js · Tesseract.js.
 
-**Founder:** Yabsera Teklemariyam · [yabsiratekle@gmail.com](mailto:yabsiratekle@gmail.com) · [MIT License](LICENSE)
+Built with AI assistance. [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md) · [Patch walkthrough](docs/patches/PAYMENTS-AND-INVOICE-INBOX.md) · [MIT License](LICENSE).
+
+**Founder:** Yabsera Teklemariyam · [yabsiratekle@gmail.com](mailto:yabsiratekle@gmail.com)

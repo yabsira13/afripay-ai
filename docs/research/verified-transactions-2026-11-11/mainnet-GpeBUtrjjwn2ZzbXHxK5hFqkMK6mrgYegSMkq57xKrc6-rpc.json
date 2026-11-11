@@ -1,0 +1,166 @@
+{
+  "provider": "https://free.rpc.fastnear.com",
+  "observedAt": "2026-11-11T12:50:46.586839+00:00",
+  "response": {
+    "jsonrpc": "2.0",
+    "result": {
+      "final_execution_status": "FINAL",
+      "receipts": [
+        {
+          "predecessor_id": "yabsera13.near",
+          "priority": 0,
+          "receipt": {
+            "Action": {
+              "actions": [
+                {
+                  "Transfer": {
+                    "deposit": "10000000000000000000000"
+                  }
+                }
+              ],
+              "gas_price": "1000000000",
+              "input_data_ids": [],
+              "is_promise_yield": false,
+              "output_data_receivers": [],
+              "signer_id": "yabsera13.near",
+              "signer_public_key": "ed25519:AZxhGLwCkHS8R78G2RtkmpprGJCnAX5KJeHUPr3PHzV4"
+            }
+          },
+          "receipt_id": "8QmKxhWT9ew7BkdvjtqDApWf7i5vicdxV9ossWTgwtR3",
+          "receiver_id": "afripayai.near"
+        },
+        {
+          "predecessor_id": "system",
+          "priority": 0,
+          "receipt": {
+            "Action": {
+              "actions": [
+                {
+                  "Transfer": {
+                    "deposit": "200864306250000000000"
+                  }
+                }
+              ],
+              "gas_price": "0",
+              "input_data_ids": [],
+              "is_promise_yield": false,
+              "output_data_receivers": [],
+              "signer_id": "yabsera13.near",
+              "signer_public_key": "ed25519:AZxhGLwCkHS8R78G2RtkmpprGJCnAX5KJeHUPr3PHzV4"
+            }
+          },
+          "receipt_id": "57LeuwR6BKpSrVXZytbEYLTQ16nYpdcdMM3WvdtBHE5F",
+          "receiver_id": "yabsera13.near"
+        }
+      ],
+      "receipts_outcome": [
+        {
+          "block_hash": "FxvDLAkYzwMN7FEyZ9W6DXwG3x3ZGxR2oSPpzWiqNK3H",
+          "id": "8QmKxhWT9ew7BkdvjtqDApWf7i5vicdxV9ossWTgwtR3",
+          "outcome": {
+            "executor_id": "afripayai.near",
+            "gas_burnt": 223182562500,
+            "logs": [],
+            "metadata": {
+              "contracts": [
+                null
+              ],
+              "gas_profile": [],
+              "version": 4
+            },
+            "receipt_ids": [
+              "57LeuwR6BKpSrVXZytbEYLTQ16nYpdcdMM3WvdtBHE5F"
+            ],
+            "status": {
+              "SuccessValue": ""
+            },
+            "tokens_burnt": "22318256250000000000"
+          },
+          "proof": [
+            {
+              "direction": "Left",
+              "hash": "7VM5wN1yE5cwyzsm4zGGrZCctRqsH6n7EjTpsY7PGCDW"
+            }
+          ]
+        },
+        {
+          "block_hash": "9Qn3GHT6Bf1H6ZBCEnivssRGm61A4jZjRsvEyU4LHbWL",
+          "id": "57LeuwR6BKpSrVXZytbEYLTQ16nYpdcdMM3WvdtBHE5F",
+          "outcome": {
+            "executor_id": "yabsera13.near",
+            "gas_burnt": 223182562500,
+            "logs": [],
+            "metadata": {
+              "contracts": [
+                null
+              ],
+              "gas_profile": [],
+              "version": 4
+            },
+            "receipt_ids": [],
+            "status": {
+              "SuccessValue": ""
+            },
+            "tokens_burnt": "0"
+          },
+          "proof": [
+            {
+              "direction": "Right",
+              "hash": "7ppkC1Vx8ZuPSpGDogfDGJVrnHeq5cCWKov8qjqsPn6W"
+            },
+            {
+              "direction": "Right",
+              "hash": "B5sZ6zet64c1TxrpnLuLRixJscmA5Ly1X2Xv2d1zWhts"
+            }
+          ]
+        }
+      ],
+      "status": {
+        "SuccessValue": ""
+      },
+      "transaction": {
+        "actions": [
+          {
+            "Transfer": {
+              "deposit": "10000000000000000000000"
+            }
+          }
+        ],
+        "hash": "GpeBUtrjjwn2ZzbXHxK5hFqkMK6mrgYegSMkq57xKrc6",
+        "nonce": 223045081000005,
+        "priority_fee": 0,
+        "public_key": "ed25519:AZxhGLwCkHS8R78G2RtkmpprGJCnAX5KJeHUPr3PHzV4",
+        "receiver_id": "afripayai.near",
+        "signature": "ed25519:5p1cGySN7X7xZATgma9f3TssrUtCjUEqVtwu21RBuzoMQTUTR9BbfVhWBPKoNzv8Kijsboo39VzpvFbJDnRbcf4d",
+        "signer_id": "yabsera13.near"
+      },
+      "transaction_outcome": {
+        "block_hash": "8dQJA9EHdiqftg6XdB7dvf8K6AHreEmvvs7w1Gnx6nrr",
+        "id": "GpeBUtrjjwn2ZzbXHxK5hFqkMK6mrgYegSMkq57xKrc6",
+        "outcome": {
+          "executor_id": "yabsera13.near",
+          "gas_burnt": 223182562500,
+          "logs": [],
+          "metadata": {
+            "gas_profile": null,
+            "version": 1
+          },
+          "receipt_ids": [
+            "8QmKxhWT9ew7BkdvjtqDApWf7i5vicdxV9ossWTgwtR3"
+          ],
+          "status": {
+            "SuccessReceiptId": "8QmKxhWT9ew7BkdvjtqDApWf7i5vicdxV9ossWTgwtR3"
+          },
+          "tokens_burnt": "22318256250000000000"
+        },
+        "proof": [
+          {
+            "direction": "Left",
+            "hash": "CWnh45k1VCM7b87rupZC9xj6AJ6voDbo9VozoUJsKEa8"
+          }
+        ]
+      }
+    },
+    "id": "afripay-proof"
+  }
+}

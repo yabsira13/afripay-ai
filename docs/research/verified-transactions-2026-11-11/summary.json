@@ -1,0 +1,71 @@
+{
+  "verifiedAt": "2026-11-11T12:51:50.954415+00:00",
+  "method": "User-supplied hashes; Nearblocks index matched to NEAR RPC FINAL execution, successful receipt outcomes and execution-block headers.",
+  "transactions": [
+    {
+      "network": "mainnet",
+      "hash": "GpeBUtrjjwn2ZzbXHxK5hFqkMK6mrgYegSMkq57xKrc6",
+      "sender": "yabsera13.near",
+      "recipient": "afripayai.near",
+      "amount_atomic": "10000000000000000000000",
+      "amount": "0.01",
+      "asset": "NEAR",
+      "status": "FINAL_SUCCESS",
+      "blockHeight": 224065130,
+      "blockHash": "8dQJA9EHdiqftg6XdB7dvf8K6AHreEmvvs7w1Gnx6nrr",
+      "timestampUtc": "2026-11-11T12:26:16+00:00",
+      "explorer": "https://nearblocks.io/txns/GpeBUtrjjwn2ZzbXHxK5hFqkMK6mrgYegSMkq57xKrc6",
+      "rpcProvider": "https://free.rpc.fastnear.com",
+      "scope": "Native Transfer only; no swap or contract-token execution."
+    },
+    {
+      "network": "mainnet",
+      "hash": "216K2NyfeTEwognrrcmmiminvR7oMLdEj5tAosBRXuhi",
+      "sender": "yabsera13.near",
+      "recipient": "afripayai.near",
+      "amount_atomic": "10000000000000000000000",
+      "amount": "0.01",
+      "asset": "NEAR",
+      "status": "FINAL_SUCCESS",
+      "blockHeight": 224058100,
+      "blockHash": "TKDNcaQbqJ1GGDLZd4AJj4CmffgNvdWcnyqEMCMZGJs",
+      "timestampUtc": "2026-11-11T11:18:27+00:00",
+      "explorer": "https://nearblocks.io/txns/216K2NyfeTEwognrrcmmiminvR7oMLdEj5tAosBRXuhi",
+      "rpcProvider": "https://free.rpc.fastnear.com",
+      "scope": "Native Transfer only; no swap or contract-token execution."
+    },
+    {
+      "network": "testnet",
+      "hash": "95t7HKvGZnrYFUR5k3cG1ZCokLnjDjrJPz5ATVb6xMEv",
+      "sender": "afripayai.testnet",
+      "recipient": "alephai.testnet",
+      "amount_atomic": "10000000000000000000000",
+      "amount": "0.01",
+      "asset": "test NEAR",
+      "status": "FINAL_SUCCESS",
+      "blockHeight": 277076749,
+      "blockHash": "8CL1P9eabTbPjDbdUbDaS1b6P9kSU62gwHwPzCUmEcYL",
+      "timestampUtc": "2026-11-10T13:59:33+00:00",
+      "explorer": "https://testnet.nearblocks.io/txns/95t7HKvGZnrYFUR5k3cG1ZCokLnjDjrJPz5ATVb6xMEv",
+      "rpcProvider": "https://test.rpc.fastnear.com",
+      "scope": "Native Transfer only; no swap or contract-token execution."
+    },
+    {
+      "network": "testnet",
+      "hash": "AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2",
+      "sender": "alephai.testnet",
+      "recipient": "afripayai.testnet",
+      "amount_atomic": "10000000000000000000000",
+      "amount": "0.01",
+      "asset": "test NEAR",
+      "status": "FINAL_SUCCESS",
+      "blockHeight": 277216925,
+      "blockHash": "5fdVZf1GDiXNafRjrGgw9uQvSAQebVfzzCki9QHmJia6",
+      "timestampUtc": "2026-11-11T12:43:07+00:00",
+      "explorer": "https://testnet.nearblocks.io/txns/AHDKgjpWoAB9JmXReLT6hbpXdTqotiT9vty9UaCHQaK2",
+      "rpcProvider": "https://test.rpc.fastnear.com",
+      "scope": "Native Transfer only; no swap or contract-token execution."
+    }
+  ],
+  "limits": "Confirms native on-chain transfers. Does not independently establish AFRIPAY private invoice/payment linkage, app origin, BSC or Intents execution. No transaction was signed or sent by the reviewer."
+}
