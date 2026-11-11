@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 const buckets = new Map<string,{count:number;reset:number}>();
-export class APIError extends Error {constructor(message: string,public status=400){super(message);}}
+export class APIError extends Error {constructor(message: string,public status=400,public recovery?:{existingOrderId:string}){super(message);}}
 export async function api(request: Request, action: ()=>Promise<unknown>) {
  try {
   const ip=request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()||'local';
@@ -18,7 +18,7 @@ export async function api(request: Request, action: ()=>Promise<unknown>) {
   return NextResponse.json(await action(),{headers:{'Cache-Control':'no-store'}});
  } catch(error) {
   if(error instanceof ZodError)return NextResponse.json({error:'Invalid input',details:error.issues.map(i=>({path:i.path,message:i.message}))},{status:400});
-  return NextResponse.json({error:error instanceof APIError?error.message:'Service unavailable. No payment was initiated.'},{status:error instanceof APIError?error.status:503});
+  return NextResponse.json({error:error instanceof APIError?error.message:'Service unavailable. No payment was initiated.',...(error instanceof APIError&&error.recovery?{recovery:error.recovery}:{})},{status:error instanceof APIError?error.status:503});
  }
 }
 export async function json(request: Request) {const raw=await request.text();if(raw.length>2_000_000)throw new APIError('Request too large.',413);try{return JSON.parse(raw);}catch{throw new APIError('Invalid JSON.');}}
