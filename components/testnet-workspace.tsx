@@ -13,6 +13,7 @@ export default function TestnetWorkspace({userId,onSignIn,page='dashboard',onNav
  const session=useWalletSession('testnet',userId),account=session.account,connected=session.connected;
  const [balance,setBalance]=useState<{accountId:string;balance:string;blockHeight:number}|null>(null),[receiver,setReceiver]=useState(''),[amount,setAmount]=useState('0.01'),[proposal,setProposal]=useState<TestnetProposal|null>(null),[approved,setApproved]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[history,setHistory]=useState<TestnetRecord[]>([]),[revision,setRevision]=useState(0),[checking,setChecking]=useState(''),[rowError,setRowError]=useState('');
  const signing=useRef(false),lastAttempt=useRef(0),accountNow=useRef(account);accountNow.current=account;
+ useEffect(()=>{if(!userId)return;try{const key='afripay-supplier-payment:'+userId,raw=sessionStorage.getItem(key);if(!raw)return;const value=JSON.parse(raw);if(value.network!=='testnet'||!testnetAccount.safeParse(value.wallet).success)return;sessionStorage.removeItem(key);setReceiver(value.wallet);setProposal(null);setApproved(false);}catch{}},[userId,page]);
  const storageKey='afripay-testnet-history:'+userId;
  useEffect(()=>{try{setHistory(readStoredTestnetHistory(JSON.parse(localStorage.getItem(storageKey)||'[]')));}catch{}},[storageKey]);
  useEffect(()=>{setError('');setNotice('');setRowError('');setProposal(null);setApproved(false);},[page,account]);

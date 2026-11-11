@@ -71,3 +71,7 @@ Read [RELEASE-0.7.md](RELEASE-0.7.md) before enabling. Install `supabase/live-pa
 ### Upgrading to 0.9.4
 
 After the existing mainnet payment-link foundation, run the complete atomic `supabase/mainnet-transfers.sql` migration in SQL Editor, then deploy 0.9.4. Do not rerun older mainnet migrations afterward. No new secret is required. This adds native NEAR and direct BSC invoice/order handling while preserving records. Existing mainnet funding flags and Supabase server credentials still apply. See [release instructions](RELEASE-0.9.4.md) for wallet support, caps and post-deploy checks. Funded mainnet end-to-end acceptance has not been performed by the development assistant.
+
+### Upgrading from 0.9.4 to 0.9.5
+
+Run `supabase/network-suppliers.sql` after the existing supplier-marketplace foundation, then deploy 0.9.5. The migration preserves legacy registrations and copies their mainnet destinations with existing review status, adds separate NEAR testnet applications and restores all guards atomically. No new secret is needed. Shared native NEAR received history uses the existing 0.9.4 order/evidence records, so existing verified payments need no resend or manual data copying. See RELEASE-0.9.5.md.

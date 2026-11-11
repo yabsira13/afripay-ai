@@ -4,11 +4,11 @@
 
 AFRIPAY AI helps African businesses review invoices, spot changed payment destinations and approve payments with clear risk explanations. Built for NEAR HACKATHON 2026.
 
-[Live demo](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **Version 0.9.4**
+[Live demo](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **Version 0.9.5**
 
 **Payment status:** DUSD is simulated. The founder demonstrated a paid testnet invoice, and its 0.01 test NEAR transfer was independently confirmed through public RPC. [View the transaction](https://testnet.nearblocks.io/txns/55jZE7gnpLRzhUySa2NtqxMRp6PuxfqFcWhzmECiHWGa). Native NEAR mainnet transfers, direct BSC USDT/USDC transfers and the operator-gated Intents pilot need funded end-to-end demonstrations. Gas sponsorship and arbitrary source-chain wallets are not implemented.
 
-Token menus show clean coin names and separate networks. Native NEAR transfers use a NEAR wallet; direct BSC USDT/USDC uses a compatible EVM wallet on chain 56. NEAR-funded cross-chain payments still require NEAR approval. Every payment requires wallet approval. [Install 0.9.4, including its required Supabase migration](docs/RELEASE-0.9.4.md).
+Mainnet Overview now uses real balance and activity cards. Direct NEAR transfers appear in both sender and receiver history, with exact totals and explorer links. Mainnet and testnet suppliers register separately and need administrator review. [Install 0.9.5 and its required supplier SQL](docs/RELEASE-0.9.5.md).
 
 ## Try it in two minutes
 
@@ -45,13 +45,13 @@ Open the local URL printed by Next.js. Guest exploration needs no credentials.
 
 For accounts, copy `.env.example` to `.env.local`, configure your Supabase public URL/key, install the [database migrations and authentication settings](docs/PROJECT-GUIDE.md#configure-accounts), and configure SMTP. Testnet invoices/activity additionally require `supabase/testnet-invoices.sql`, `supabase/testnet-activity.sql` and the server-only `SUPABASE_SERVICE_ROLE_KEY`. Keep secrets out of Git and `NEXT_PUBLIC_` variables.
 
-Existing installation? Follow the [0.9.4 payment update and required SQL migration](docs/RELEASE-0.9.4.md) and [0.9 setup instructions](docs/RELEASE-0.9.md). Mainnet funding is disabled by default and requires separate operator configuration.
+Existing installation? Follow the [0.9.5 received-history, dashboard and supplier update](docs/RELEASE-0.9.5.md) and [0.9 setup instructions](docs/RELEASE-0.9.md). Mainnet funding is disabled by default and requires separate operator configuration.
 
 ## Verification
 
-**373 automated tests**, **130 desktop/mobile browser checks**, TypeScript, the production build and a **41-route smoke check** passed for 0.9.4. Tests cover database authorization, payment locking, exact transfers and settlement proof checks.
+**388 automated tests** pass for 0.9.5, including authorization, payment proof, shared receiver history, exact chart totals and network supplier moderation. The 142-check browser regression, 14 final focused desktop/mobile checks, production build and 41-route smoke check also passed.
 
-Browser and RPC fixtures do not prove an actual blockchain transfer or email delivery. See [verification evidence and limits](docs/VERIFICATION-0.9.4.md).
+Browser and RPC fixtures do not prove an actual blockchain transfer or email delivery. See [verification evidence and limits](docs/VERIFICATION-0.9.5.md).
 
 ```sh
 npm test
