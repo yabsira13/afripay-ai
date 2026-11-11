@@ -32,3 +32,4 @@
 .live-dashboard .balance-card .balance-content h2{overflow-wrap:anywhere;font-size:clamp(26px,3vw,42px);line-height:1.2}.live-dashboard .balance-card .balance-caption{overflow-wrap:anywhere}.live-dashboard .balance-actions{flex-wrap:wrap}.live-dashboard .stat-value{overflow-wrap:anywhere}.native-mainnet-record details{margin:12px 0}.native-mainnet-record summary{cursor:pointer}
 
 .live-dashboard .activity-card>details{padding:0 24px 14px}.live-dashboard .activity-card>.fine{padding:0 24px 18px;margin:0}.live-dashboard .activity-card>.body-copy{padding:0 24px}
+.settlement-link{display:inline-flex;margin:8px 18px 8px 0}.invoice-hub-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}.invoice-hub-tabs .btn{white-space:normal}.invoice-party{font-size:13px;line-height:1.8}.invoice-status-paid{border-left:4px solid #259b73}.invoice-status-processing{border-left:4px solid #d78a31}

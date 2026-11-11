@@ -2,8 +2,8 @@ import type {SupabaseClient} from '@supabase/supabase-js';
 import {APIError} from './server';
 /** Match the database's case-insensitive invoice key; ILIKE metacharacters are literals. */
 export function literalReference(reference:string){return reference.trim().replace(/[\\%_]/g,'\\$&');}
-export async function guardExistingLiveReference(db:SupabaseClient,user:string,reference:string){
- const {data,error}=await db.from('live_payment_orders').select('id,state,expires_at').eq('user_id',user).ilike('invoice_reference',literalReference(reference)).not('state','in','(EXPIRED,REFUNDED)').limit(1).maybeSingle();
+export async function guardExistingLiveReference(db:SupabaseClient,user:string,reference:string,requestToken?:string){
+ let query=db.from('live_payment_orders').select('id,state,expires_at').eq('user_id',user).ilike('invoice_reference',literalReference(reference)).not('state','in','(EXPIRED,REFUNDED)');if(requestToken)query=query.eq('input->>requestToken',requestToken);const {data,error}=await query.limit(1).maybeSingle();
  if(error)throw new APIError('Existing payment history could not be checked. Refresh before retrying.',503);
  if(!data||data.state==='QUOTED'&&Date.parse(data.expires_at)<=Date.now())return;
  throw new APIError(data.state==='SUCCESS'?'This invoice reference already has a verified paid order. Review its receipt; do not pay again.':'This invoice reference already has a saved payment. Review or recover it before starting another.',409,{existingOrderId:data.id});

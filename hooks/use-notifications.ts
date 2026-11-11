@@ -1,0 +1,4 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {accountRequest} from '@/lib/live-client';
+export function useNotifications(userId:string|null|undefined,enabled:boolean,account=''){const [unread,setUnread]=useState(0);useEffect(()=>{let active=true;setUnread(0);if(!userId||!enabled)return;const owner=userId;async function load(sync=false){try{const result=await accountRequest(owner,'/api/notifications',sync&&account?{action:'sync',account}:undefined);if(active)setUnread(result.unread);}catch{}}void load(true);const refresh=()=>{void load(true);};const timer=setInterval(refresh,30000);window.addEventListener('afripay-notifications-updated',refresh);return()=>{active=false;clearInterval(timer);window.removeEventListener('afripay-notifications-updated',refresh);};},[userId,enabled,account]);return unread;}

@@ -6,7 +6,7 @@ import {serverAuthSettings,runtimeSetting} from './server-settings';
 import {liveInput,makeLiveRequest,supportedToken,validateLiveQuote,settlementEvidence,verifyNativeDeposit,walletFundingRequest,nativeAsset,type LiveInput} from './live-payments';
 import {nativeReview,nativeWalletRequest,nativeExecution} from './native-mainnet';
 import {directNearAsset,normalizeToken} from './asset-catalog';
-import {analyzeInvoice,score} from './security';
+import {analyzeInvoice,score,sameAddress} from './security';
 import {nearRpc} from './near-observations';
 export function liveEnabled(){return runtimeSetting('LIVE_PAYMENTS_ENABLED')==='true'&&!!runtimeSetting('SUPABASE_SERVICE_ROLE_KEY')&&!!serverAuthSettings().settings;}
 export async function liveUser(request:Request){
@@ -18,7 +18,7 @@ export async function liveUser(request:Request){
  return {user:data.user.id,db:createClient(settings.url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}})};
 }
 export function requireLive(){if(!liveEnabled())throw new APIError('Real payments are disabled until live storage and operator settings are configured.',503);}
-export async function liveRpc(db:SupabaseClient,name:string,args:Record<string,unknown>){const {data,error}=await db.rpc(name,args);if(error){if(error.code==='23505'&&error.message.includes('live_invoice_once')&&typeof args.p_user==='string'&&args.p_input)await guardExistingLiveReference(db,args.p_user,(args.p_input as any).invoiceReference);throw new APIError('Payment database rejected the step: '+error.message,409);}return data;}
+export async function liveRpc(db:SupabaseClient,name:string,args:Record<string,unknown>){const {data,error}=await db.rpc(name,args);if(error){if(error.code==='23505'&&error.message.includes('live_invoice_once')&&typeof args.p_user==='string'&&args.p_input)await guardExistingLiveReference(db,args.p_user,(args.p_input as any).invoiceReference,(args.p_input as any).requestToken);throw new APIError('Payment database rejected the step: '+error.message,409);}return data;}
 export async function readOrder(db:SupabaseClient,user:string,id:string){const {data,error}=await db.from('live_payment_orders').select('*').eq('id',id).eq('user_id',user).single();if(error||!data)throw new APIError('Live payment not found or database migration missing.',404);return data;}
 export function signed(raw:unknown){if(!verifyQuoteSignature(raw as QuoteResponse))throw new APIError('1Click quote signature verification failed. Do not fund this quote.',502);}
 export async function liveTokens(){return supportedToken.array().parse(await oneClick('/tokens')).map(normalizeToken);}
@@ -29,8 +29,9 @@ export async function reserveQuote(db:SupabaseClient,user:string,raw:unknown){
  // JSONB field order is not stable. Compare keys instead.
  if(Object.keys(input).some(k=>existing.data.input[k]!==input[k as keyof LiveInput]))throw new APIError('Approval ID was already used with different details.',409);
  }return existing.data;}
+ if(input.registeredSupplierId){const supplier=await db.from('network_supplier_applications').select('wallet,chain').eq('id',input.registeredSupplierId).eq('network','mainnet').eq('status','approved').single();if(supplier.error||supplier.data.chain!==input.destinationChain||!sameAddress(supplier.data.wallet,input.recipient,input.destinationChain))throw new APIError('The payment destination no longer matches the approved supplier. Review it again.',409);}
  await validateSeparatePayment(db,user,input);
- await guardExistingLiveReference(db,user,input.invoiceReference);
+ await guardExistingLiveReference(db,user,input.invoiceReference,input.requestToken);
  if(input.requestToken){const {bindRequest}=await import('./payment-request-server');await bindRequest(db,input);}
  if(input.destinationAsset===directNearAsset){
   const {result}=await nearRpc('mainnet','query',{request_type:'view_account',account_id:input.recipient,finality:'final'});const review=nativeReview(input,result?.block_height);await preflightBalance(input.sender,review.quote.amountIn);
