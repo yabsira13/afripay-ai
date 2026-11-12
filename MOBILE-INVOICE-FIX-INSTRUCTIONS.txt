@@ -1,0 +1,11 @@
+AFRIPAY 0.9.5 — focused invoice inbox fix
+
+1. Extract this ZIP into your existing afripay-ai project, replacing the matching files.
+2. Keep your .git folder and .env.local. No Supabase SQL or environment variable changes are required.
+3. In GitHub Desktop, commit with summary: Fix mobile invoice inbox loading and filters
+4. Push origin and wait for Vercel to show Ready.
+5. Reload on your phone, select Live wallet (Mainnet), and open Invoices > All invoices.
+
+Changes: saved invoices load before provider reconciliation; All invoices is the default with received/issued counts; returning to the page refreshes the list; refresh errors retain the saved list and show a retry message. Optional payment links remain in their own tab.
+
+This addresses loading and filtering issues found in the code. Your authenticated production inbox was not accessible for direct verification. Browser regressions use desktop and mobile Chromium, not iOS Safari.
