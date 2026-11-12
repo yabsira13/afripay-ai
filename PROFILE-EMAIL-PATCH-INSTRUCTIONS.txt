@@ -1,0 +1,27 @@
+AFRIPAY 0.9.5 — profile and account email patch
+
+Install
+1. Extract this ZIP into your existing afripay-ai project and replace the matching files.
+2. Keep .git and .env.local. This patch does not change the app version or require Supabase SQL.
+3. Commit in GitHub Desktop with summary: Add profile view, editing and email changes
+4. Push origin and wait for Vercel Ready. Reload My account on PC and mobile.
+
+What changed
+- My account shows saved name, business, account type and country.
+- Edit profile opens the existing private profile form. Save returns to the profile view; Cancel discards unsaved edits.
+- The sign-in email is displayed separately from the connected wallet.
+- Change email asks for the new email twice, sends the request through Supabase Auth and shows pending confirmation.
+- Account ID is available under its expandable label to compare PC and phone identity.
+- Changing email updates the existing account instead of creating a new account or moving invoices.
+
+Supabase email settings
+No database migration or new environment variables are required. In Authentication > URL Configuration, allow this redirect URL if it is not already covered:
+https://afripay-ai.vercel.app/settings
+Keep email confirmation and Secure email change enabled in your email provider settings. Supabase may require links from both the current and new inboxes. Email delivery depends on your configured Supabase mail service.
+
+Check
+Open My account on both devices. Compare Current email and Account ID. Matching wallet addresses alone do not establish that the AFRIPAY accounts match.
+Try Edit profile, change a field, then Cancel; reopen and save a real change.
+For an email change, use an address you control and follow the confirmation email instructions. Confirm that the same account ID and invoices remain afterward.
+
+Automated email tests use mocked Supabase responses; no real email change or email delivery was performed by this patch.
