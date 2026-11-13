@@ -71,7 +71,7 @@ npm ci
 npm run dev
 ```
 
-Guest demo exploration needs no credentials. For accounts, copy `.env.example` to `.env.local` and configure Supabase. Private invoice/testnet services require the server-only `SUPABASE_SERVICE_ROLE_KEY`; the deployed mainnet operator flag was enabled at the 12 November review. Fresh local installations default to `LIVE_PAYMENTS_ENABLED=false` until configured; wallet approval is still required for every payment.
+Guest demo exploration needs no credentials. For accounts, copy `.env.example` to `.env.local` and configure Supabase. Private invoice/testnet services require the server-only `SUPABASE_SERVICE_ROLE_KEY`; mainnet payments are enabled on the live app; fresh local installs default to `LIVE_PAYMENTS_ENABLED=false` until configured. Every payment still requires wallet approval.
 
 Follow the [current setup and migration order](docs/SETUP.md). Existing installations should use the [focused invoice/payment patch guide](docs/patches/PAYMENTS-AND-INVOICE-INBOX.md). Keep `.env.local` out of Git and server credentials out of `NEXT_PUBLIC_` variables.
 
@@ -92,9 +92,9 @@ Browser tests use `npm run test:e2e` against a running app. [Setup details](docs
 
 ## Hackathon development
 
-The public repository history begins with [the initial commit on 7 November 2026](https://github.com/yabsira13/afripay-ai/commit/0f71026524847f189c6715bda1c3963722062089). Work recorded during the hackathon includes native mainnet payments, private invoice delivery, the supplier dashboard, settlement checks, notifications and PDF receipts.
+AFRIPAY was built from scratch after **19 October 2026**, within the hackathon development window, with AI assistance and third-party libraries. No code from an earlier personal project was reused.
 
-Publication dates do not establish the exact first coding date. The [development and reuse disclosure](docs/HACKATHON.md#development-and-reuse-disclosure) records what is confirmed and the remaining founder confirmation about any earlier code. AI assistance and third-party dependencies are disclosed below; any pre-window project baseline must be identified separately.
+Work built during this window includes native mainnet payments, the business inbox, the supplier dashboard, settlement checks, notifications and PDF receipts. The [first public commit](https://github.com/yabsira13/afripay-ai/commit/0f71026524847f189c6715bda1c3963722062089) is dated 7 November 2026. See the [development and dependency disclosure](docs/HACKATHON.md#development-and-reuse-disclosure).
 
 ## Project
 

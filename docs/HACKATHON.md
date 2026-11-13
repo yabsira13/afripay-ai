@@ -1,68 +1,56 @@
-# NEAR Hackathon 2026 submission kit
+# NEAR Hackathon 2026 — AFRIPAY submission guide
 
-## Project description (draft)
+Current guide for AFRIPAY 0.9.5 and its focused patches. This replaces the earlier simulation-only description. [Official rules](https://nearhackathon.com/HACKATHON.md) remain authoritative; recheck them before submission.
 
-AFRIPAY AI helps African businesses turn supplier invoices into payment proposals while catching changes that can lead to invoice fraud. An Ethiopian exporter can extract a 200 USDC invoice, compare the recipient with saved supplier details, review an explainable risk report and approve a clearly labeled simulation. A second scenario shows how a changed supplier wallet and instructions to bypass verification trigger a critical-risk block.
+## What exists today
 
-The NEAR integration uses official 1Click endpoints for live supported-token discovery, dry swap quotes and execution-status lookup, plus official NEAR Connect for wallet connection. The app does not move real funds. Real funded execution and database-backed business persistence remain future work; no simulated confirmation is presented as an on-chain settlement.
+AFRIPAY is an invoice and payments workspace for African businesses. Users extract supplier invoice fields, inspect explainable security checks, deliver invoices to registered businesses, approve a native NEAR payment in their own wallet and inspect verified settlement, activity and PDF receipts.
+
+Native NEAR mainnet and testnet transfers have independently checked public chain evidence. That evidence proves the transfers, not their private invoice linkage. A final recording must show the invoice and its exact bound payment together. Direct BSC and NEAR-funded Intents have implementations and fixture tests; funded acceptance remains pending. DUSD is simulated account-to-account credit with no cash value.
+
+Mainnet payments are enabled on the live app; fresh local installs default to `LIVE_PAYMENTS_ENABLED=false` until configured. Every payment still requires wallet approval and settlement verification.
 
 ## Tracks
 
 - Primary: `realworld` — Real-World Money.
-- Additional: `security` — AI Security & Defense.
+- Additional: `security` — AI Security & Defense, based on explainable invoice checks, spending constraints and human-controlled payment authorization.
 
-These are valid IDs in the official rules downloaded on 2026-11-04. Re-read the current rules before final submission.
+No autonomous-business execution, sponsored gas, complete external wallet history or production security certification is claimed. The organizers' example prompts are suggestions, not mandatory feature lists.
 
-## Architecture diagram
+## Judge walkthrough
 
-See `ARCHITECTURE.md` for Mermaid diagram, trust boundaries and research sources.
+Follow [JUDGE-WALKTHROUGH.md](JUDGE-WALKTHROUGH.md): start with a no-funds guest review, then the native testnet path. The mainnet recording separately demonstrates a small founder-approved real transfer. Supplier approval is required for issuing internal mainnet invoices; it is not bypassed for judges. Existing published links are bearer links, so do not publish a private invoice merely to make it easier to inspect.
 
-## 2–3 minute recording script
+## Demonstration and X post
 
-1. **0:00–0:15:** Show dashboard. “AFRIPAY AI helps an Ethiopian exporter review supplier invoices and make safer cross-border payment decisions. This is the labeled demo workspace.”
-2. **0:15–0:50:** Invoice upload → clean sample → Extract fields. Point out 200 USDC and full wallet. Use a new invoice number such as `INV-DEMO-VIDEO-200` to avoid the intentionally seeded duplicate. Verify recipient and save.
-3. **0:50–1:15:** Show evidence report → Prepare payment → Security check. Explain supplier matching and spending limits.
-4. **1:15–1:40:** If available, show a genuine 1Click dry quote with supported assets, fees/output and raw response. If API is unavailable, show the error and explain the limitation honestly. Return to the illustrative demo route.
-5. **1:40–2:05:** Review and approve demo payment. Explicitly advance simulated settlement. Download the receipt and show “SIMULATED — NOT PROOF OF A BLOCKCHAIN PAYMENT.”
-6. **2:05–2:35:** Upload suspicious sample. Show changed wallet and bypass-verification evidence. Show critical-risk block and disabled payment button.
-7. **2:35–2:50:** Explain “AI prepares, humans approve. Live execution stays disabled until the production coordinator is ready.”
+Use [DEMO-VIDEO.md](DEMO-VIDEO.md) for the spoken script, recording order, preparation and X draft. The founder records and publishes the post. It must mention NEAR HACKATHON, tag @NEARProtocol and include #NEARHackathon, with video or screenshots attached. A video is preferable for this multi-step workflow; it is necessary when judges cannot open a local-only demo.
 
-For a local-only project, official rules require a video rather than screenshots alone. A video file was not generated in this session.
+No public X post or saved application has been confirmed in the current conversation. Check actual submission status before submitting; this sentence is not an organizer-side lookup.
 
-## Screenshot list (to capture in a supported browser)
+## Development and reuse disclosure
 
-- Desktop overview with lavender balance card and Security Shield.
-- Invoice extraction with 200 USDC and unverified wallet.
-- Critical-risk changed-wallet report.
-- Human approval screen.
-- Simulated settlement and receipt.
-- Mobile dashboard and invoice upload.
+The founder confirms that AFRIPAY was built from scratch after **19 October 2026**, within the hackathon development window, with AI assistance and third-party libraries. No code from an earlier personal project was reused.
 
-No screenshots are claimed without browser capture.
+Work built during this window includes native mainnet payments, the business inbox, the supplier dashboard, settlement checks, notifications and PDF receipts. The public repository was created on **7 November 2026**; its [first public commit](https://github.com/yabsira13/afripay-ai/commit/0f71026524847f189c6715bda1c3963722062089) is dated the same day.
 
-## Founder’s X announcement draft
+Third-party dependencies include Next.js, React, TypeScript, Supabase, NEAR Connect, the official NEAR Intents 1Click SDK, PDF.js, Tesseract.js, pdf-lib and fontkit. Dependencies are recorded in package.json/package-lock.json. The repository carries an MIT license; third-party code and assets retain their own licenses.
 
-> Supplier invoice fraud can start with one changed wallet address.
->
-> I built AFRIPAY AI at NEAR HACKATHON: invoice extraction, explainable transaction risk and human-approved payment proposals for African businesses. It integrates NEAR Intents for live dry quotes; funded payments are disabled in this prototype.
->
-> [Attach the recorded demo, then add your actual public demo/repository links.]
->
-> @NEARProtocol #NEARHackathon
+Tagging the actual reviewed submission commit makes the final scope easier to reproduce.
 
-The founder publishes this post. No social post is sent automatically.
+## Final checks
 
-## Before submission
+- [ ] On phone and PC, compare My account → Current email and Account ID. Different IDs mean different private inboxes. Sign into the intended existing account; do not merge records based on a wallet address.
+- [ ] Demonstrate one invoice delivered to the intended business, the payment review, wallet approval, verified Paid state for both parties, transaction activity and a PDF receipt.
+- [ ] Demonstrate one suspicious invoice and the evidence behind its warning/block. Clearly label deterministic checks versus an optional model.
+- [ ] Verify actual email confirmation/recovery and any configured model if they appear in the recording.
+- [ ] Confirm a clean install using README and SETUP.md; run the checks listed there. Do not turn mocked tests into claims of live wallet acceptance.
+- [ ] Freeze the submission commit after final fixes; the founder-confirmed development and reuse disclosure is recorded above.
+- [ ] Keep the public repository available through judging; keep the hosted demonstration online through at least 18 November, preferably 25 November.
+- [ ] Publish the founder's X post and retain its real public URL.
+- [ ] Confirm project/lead names, contact email, actual team size, chosen tracks, mainnet prize account, repository URL, X URL and final description.
+- [ ] Obtain consent to the organizer's contact notice, exactly as written in the official rules, before submitting.
+- [ ] Review the exact application once. Submit only if the project has not already been submitted; retain its request ID and successful response. Saved corrections go through the organizer's request-changes page.
 
-- [ ] Confirm production build, unit/integration tests and browser journeys.
-- [ ] Verify SQL RLS policies in an isolated Supabase project before enabling persistence.
-- [ ] Publish a public repository and deployed demo (or reproducible local instructions with video).
-- [ ] Keep the repository public through judging; deadline: **2026-11-14 23:59 UTC**.
-- [ ] Record and attach the demo video.
-- [ ] Founder publishes the X post and supplies its actual URL.
-- [ ] Founder supplies lead name, contact email, team size `1`, mainnet NEAR prize account and final URLs. Do not invent these.
-- [ ] Read the official consent text verbatim: “I agree that the organizers may use these details to review our submission and contact us about this hackathon.”
-- [ ] Generate one request ID, show the complete exact final payload and receive founder confirmation before sending it.
-- [ ] Send one submission only; use the same request ID if a retry is required. Never submit twice.
+Deadline: **14 November 2026 at 23:59 UTC**, which is **15 November at 02:59 in Addis Ababa**. Aim to submit earlier on 14 November.
 
-No submission has been sent. Public repository, hosting, screenshots and video remain outstanding.
+This guide is preparation, not a submission, published social post, security audit or funded-wallet test.
