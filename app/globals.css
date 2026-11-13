@@ -33,3 +33,7 @@
 
 .live-dashboard .activity-card>details{padding:0 24px 14px}.live-dashboard .activity-card>.fine{padding:0 24px 18px;margin:0}.live-dashboard .activity-card>.body-copy{padding:0 24px}
 .settlement-link{display:inline-flex;margin:8px 18px 8px 0}.invoice-hub-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}.invoice-hub-tabs .btn{white-space:normal}.invoice-party{font-size:13px;line-height:1.8}.invoice-status-paid{border-left:4px solid #259b73}.invoice-status-processing{border-left:4px solid #d78a31}
+
+/* Keep Demo invoice actions and refresh controls readable on narrow screens. */
+.demo-invoice-inbox-header{align-items:flex-start;gap:16px;flex-wrap:wrap}.demo-invoice-inbox-header>div{flex:1 1 280px;min-width:0}.demo-invoice-inbox-header>.text-btn{flex:0 0 auto;text-align:left}
+@media(max-width:760px){.demo-invoice-page>.page-heading{display:block}.demo-invoice-page>.page-heading>.heading-actions{width:100%;margin-top:20px}.demo-invoice-page>.page-heading .record-actions{width:100%}.demo-invoice-page>.page-heading h1{overflow-wrap:normal}.demo-invoice-inbox-header{display:block}.demo-invoice-inbox-header>.text-btn{margin:8px 0 18px}}

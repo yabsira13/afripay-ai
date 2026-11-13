@@ -1,0 +1,18 @@
+AFRIPAY — Create and send invoices in Demo
+
+1. Copy the included files into your existing project. Keep .git and .env.local.
+2. In Supabase SQL Editor, run ONLY the included supabase/demo-invoice-inbox.sql. It adds Demo billing without resetting credits or payments. Your final-payments.sql foundation must already exist; do not rerun older migrations.
+3. Commit: Add Demo invoice creation and account inbox
+4. Push origin and wait for Vercel Ready. Reload both devices.
+
+HOW TO USE IT
+Account B (customer): Demo > Receive > copy full Receive code. Claim test credits here if needed and available.
+Account A (issuer): Demo > Invoices > Create invoice > enter B's code, reference, amount and description > Review > confirm > Send.
+Account B: Invoices > Received demo invoices > review bill > confirm > approve DUSD payment.
+Account A: Issued demo invoices > Paid (demo). Both accounts can view PDFs/receipts and the credit transaction.
+
+Sending an invoice moves no credits. Paying it sends DUSD from B to A. No supplier/admin approval or wallet is needed for this Demo flow. DUSD has no cash value.
+
+Upload invoice remains available for reading supplier documents. It is separate from sending a bill to another account.
+
+No new environment variable, funding setting or version bump is required. Mainnet and testnet remain separate. See docs/patches/DEMO-INVOICE-INBOX.md for the full walkthrough and recovery rules.

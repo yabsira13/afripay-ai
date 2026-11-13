@@ -1,42 +1,37 @@
 # Security model and operational limits
 
-## Implemented boundaries
+## Current boundaries — 0.9.5 and invoice patches
 
-- The assistant produces data only. No arbitrary tool execution, private keys or server signing endpoint exists. The native testnet lab allows only an explicitly reviewed, wallet-authorized Transfer request on testnet; the assistant cannot invoke it.
-- Invoice extraction is untrusted. Recipient confirmation is explicit and reset after edits to payment-relevant fields.
-- Demo approval reevaluates risk against the latest state. It binds all proposal details to the reviewed invoice, checks approval and quote age, blocks critical risk and requires extra confirmation for high risk.
-- Duplicate active invoice payments are checked by the demo transition function and by a partial unique index in the production schema.
-- Failure/refund outcomes leave invoices unpaid. Demo receipt identifiers start with DEMO and never look like transaction hashes.
-- API request schemas reject invalid data, committed quotes, excessive payloads, non-web URLs and unsupported address formats. Quote API uses decimal strings and BigInt atomic conversion.
-- Outbound 1Click/RPC destinations are fixed. URL analysis never fetches submitted URLs, preventing an SSRF path through link analysis. Only the operator-configured AI endpoint is variable.
-- Optional provider secrets remain server-side. No API exposes environment values. Public Supabase publishable keys are intentionally browser-visible; service-role keys are never used by this UI.
-- Cross-origin mutations are rejected when Origin is supplied. Routes are non-privileged; they do not initiate money movement. Add authenticated CSRF/session protections before introducing privileged write APIs.
-- SQL financial records are server-write-only. Tenant membership RLS protects reads. Compound foreign keys prevent cross-business invoice/quote references. Audit rows have no browser insert/update/delete policy.
-- File size and PDF page limits reduce resource abuse. PDF.js is pinned through the lockfile to a version that fixes the audited malicious-PDF advisory. Extraction reads the text layer only; document actions are not invoked.
+The later version sections below record implementation history; this section describes the current scope. Mainnet native transfers are implemented and have verified public transaction evidence. The earlier simulation-only description is superseded. The hosted operator flag was enabled at review; new local setups still default to disabled.
 
-## Risk model
+- No wallet private key or seed phrase is collected. Models and extraction tools cannot authorize, sign or execute transfers. Wallet approval remains mandatory.
+- Authenticated server routes derive the account from a verified Supabase user, not a client-supplied owner ID. Service-only database functions coordinate reservations and writes; participant policies protect private invoice access. Administrator approval is separate from signup/profile role.
+- Native settlement requires the exact bound sender, recipient, amount and final successful execution evidence. A wallet-returned hash or elapsed timer does not mark an invoice paid. Provider failures leave outcomes unresolved rather than initiating a replacement transfer.
+- Invoice input is untrusted. Edits clear review/confirmation. Deterministic checks record observations or heuristics, including supplier-destination differences, duplicate references and suspicious instructions. They do not certify legal identity, use a comprehensive threat feed or guarantee safety.
+- Quotes, payment bindings, spending caps, duplicate prevention and recovery have implemented controls and automated coverage, documented in the version sections. Tests do not establish an independent security audit or funded cross-chain acceptance.
+- Public optional invoice links deliberately reveal their published projection to holders. Do not publish private fields unintentionally. Private business inboxes are account-scoped, not shared merely because accounts use the same public wallet address.
+- Inbox sync responses contain only the requesting account's ID and its returned counts, a public project host, version and check time. They expose no bearer token, key or other user's inbox. The client rejects a server context for another account.
+- Public token/project settings are distinct from server-only model/partner/service credentials. Fixed RPC/1Click hosts limit outbound destinations; user-supplied links are not fetched for security analysis.
 
-Scores are additive, capped at 100. Low: 0–24; Medium: 25–49; High: 50–79; Critical: 80–100. Each rule records its code, points, explanation and evidence class. High risk requires manual review; critical risk is blocked. Missing external intelligence contributes zero maliciousness points and is always disclosed. No provider absence is framed as a clean safety verdict.
+## Risk and evidence limits
 
-## Not production guarantees
+Risk scores are additive and capped at 100: Low 0–24, Medium 25–49, High 50–79, Critical 80–100. Critical evidence blocks the supported review flow; risk labels are not proof of authenticity. Missing threat intelligence is disclosed rather than invented. Optional model proposals are validated against supplied text and have no signing tools.
 
-Local storage is editable and can be corrupted or cleared. Demo audit records are not cryptographically chained. Browser spending policies are not authorization controls for real money. No threat feed, comprehensive historical-chain analysis, QR decoding, redirect analysis or contract-interaction simulation is configured.
+Native NEAR mainnet/testnet transfer evidence is documented in VERIFIED-TRANSACTIONS.md. Direct BSC and NEAR-funded Intents still need funded end-to-end acceptance evidence. Independent destination-chain decoding and refund verification remain limited for provider-mediated settlement. Tracking is not a complete external wallet index. Private production account permissions, actual wallet providers, email delivery and optional models require acceptance checks beyond mocked browser tests.
 
-Rate limiting is in-memory per process and assumes a trusted proxy for the forwarded IP header. Production needs a shared edge limiter, observability and abuse limits on paid AI calls. There is no application CSP yet because wallet iframe and OCR worker hosts require a verified allowlist. Security headers currently include no-sniff, frame denial, strict referrer policy and disabled camera/microphone/geolocation.
+## Operational limits
 
-SQL is a foundation; it was not applied to a live database. Service-role code can bypass RLS by design, so future coordinator code must authenticate, authorize, bind an approval to immutable quote fields and use atomic transactions. Do not add a funded action merely by toggling a boolean.
+Local demo storage is editable and unencrypted. Audit records are not immutable against the database operator, and server service credentials can bypass RLS by design. Protect and rotate credentials; never put them in public variables or Git. Per-process rate limiting is not a distributed production abuse control. Production hardening still needs monitoring, shared rate limits and a verified CSP allowlist for wallet/OCR resources. Existing headers do not constitute a complete security audit.
 
-## Before funded mainnet execution
+New deployments must install current migrations, configure authentication/mail and explicitly enable funding before intentional wallet tests. Follow SETUP.md, not an older version's migration ordering. No mainnet transaction or deployment is authorized by this document.
 
-Implement verified quote signatures, current-token validation, immutable approval binding, explicit committed-quote reapproval when output changes, expiry checks, actual supported wallet funding, memo handling, atomic spending reservations with verified FX prices, durable idempotency, quote/deposit ownership, polling/reconciliation with authenticated settlement evidence, destination transaction verification and resumable failure/refund handling. Test against tiny mainnet amounts with a separate dev wallet and explicit founder authorization.
-
-Never request a seed phrase. Never infer a settled invoice from a wallet submission, pasted hash, independent deposit lookup or elapsed time.
+## Historical implementation notes
 
 ## Private onboarding and testnet controls
 
 Profiles have owner-only SELECT/INSERT/UPDATE policies. Neither signup metadata nor account_type can appoint an admin. Existing guest names are never presented as authenticated identities. Profile fields exclude wallet keys and do not certify wallet ownership. Profile and supplier policy tests execute against embedded PostgreSQL; hosted-project verification remains required.
 
-Testnet endpoints use fixed documented testnet hosts and do not broadcast transactions. Only the wallet submits a single native Transfer with `network: testnet`. Sender/receiver must be distinct named `.testnet` accounts, amount must be positive and at most 1 test NEAR, approval expires in two minutes, and the form requires explicit confirmation. RPC verification refuses mismatched hash/signer/receiver/amount/action and requires FINAL successful recipient execution. Stored local status is never trusted as confirmation after reload. These test-token controls do not replace the unfinished mainnet coordinator or distributed spending/idempotency enforcement.
+Testnet endpoints use fixed documented testnet hosts and do not broadcast transactions. Only the wallet submits a single native Transfer with `network: testnet`. Sender/receiver must be distinct named `.testnet` accounts, amount must be positive and at most 1 test NEAR, approval expires in two minutes, and the form requires explicit confirmation. RPC verification refuses mismatched hash/signer/receiver/amount/action and requires FINAL successful recipient execution. Stored local status is never trusted as confirmation after reload. These test-token controls do not establish mainnet or cross-chain acceptance; later mainnet coordinator controls are described in the versioned sections below.
 
 
 ## v0.3 review
@@ -111,3 +106,17 @@ Service-only RPCs lock spending policy, invoice and order records, claim authori
 An authenticated public-address lookup can read only verified native transfer facts shared with the sender and receiver. The API never returns another payer's order ID, user ID, invoice contents or risk record. Reconciliation checks existing submitted hashes only through final native execution verification and does not authorize or send a transaction. Missing or mismatching evidence does not become a received amount. These records are not complete external wallet history, and lookup does not prove address ownership.
 
 Network supplier applications require an owner-scoped account and a distinct registration per mainnet/testnet network. Testnet addresses must be `.testnet`; a registration's network cannot be reassigned. Owners cannot self-approve, and every owner edit removes review approval. Appointed administrators must explicitly verify the destination, with stale-snapshot protection and separate review logs. Legacy reviewed mainnet applications retain their original review status when copied; sample invoice contacts are not copied or approved. Selecting a supplier never skips recipient review or wallet signing.
+
+### Mainnet invoice inbox and notifications
+
+Private delivery is limited to the issuer and intended payer. Issuance requires the authenticated issuer's approved mainnet registration; the server and SQL transaction verify the receiving address/network. Client roles cannot create delivery records or call the service-only delivery RPC. Public optional payment links expose only the established published request projection, not private participant IDs, notification records or payer order/risk details.
+
+Paid invoice status requires verified settlement of the exact bound order. Different published invoices can have the same human invoice number, while the immutable invoice token and reservation locks prevent a second payment to the same request. Notifications are private and deduplicated; opening a read action filters by authenticated owner. Unverified or unrelated transfers do not complete an invoice. Uploaded text is untrusted, edits invalidate review, and extraction or invoice delivery cannot sign a wallet transaction.
+
+## Demo account invoice inbox
+
+Demo invoices use the payer's shared Receive code, not an email directory or arbitrary user ID. Issuer identity comes from auth.uid(); receipt labels are explicit public account names, not private profile/email fields. Both parties must have Demo credit accounts, and self-billing is rejected. Only participants have SELECT access. Creation/payment/cancellation run through restricted authenticated functions; clients cannot directly edit invoice states, amounts, balances or transfer links.
+
+Invoices have immutable details and issuer-unique references. Reusing an invoice ID for different details is rejected. Payment locks the saved policy, invoice and credit accounts in a consistent order, uses the existing DUSD coordinator and updates Paid state and transfer link in the same transaction. The server fixes amount and receiver from the invoice. A paid retry returns the existing record; insufficient credit or a policy failure leaves the invoice unpaid. Uncertain browser results retain approval identity and can recover from the server inbox without a new debit.
+
+Demo billing does not approve suppliers, certify identity or provide mainnet/cross-chain settlement. Descriptions are untrusted display data and are never executed. No wallet signing is involved, and PDF invoices/receipts remain explicitly simulated.

@@ -1,5 +1,6 @@
 import {expect,type Page} from '@playwright/test';
 import {seed} from '../../../lib/seed';
+import type {DemoInvoice} from '../../../lib/demo-invoices';
 import type {CreditAccount,CreditTransfer} from '../../../lib/demo-credits';
 const url='https://afripay-test.supabase.co',key='sb_publishable_abcdefghijklmnopqrstuv';
 export const A='11111111-1111-4111-8111-111111111111',B='22222222-2222-4222-8222-222222222222',ADMIN='33333333-3333-4333-8333-333333333333';
@@ -7,13 +8,15 @@ const user=(id:string,email=id===ADMIN?'admin@example.com':id===A?'alice@example
 export function token(id:string){return Buffer.from(JSON.stringify({alg:'HS256',typ:'JWT'})).toString('base64url')+'.'+Buffer.from(JSON.stringify({sub:id,aud:'authenticated',role:'authenticated',exp:Math.floor(Date.now()/1000)+3600})).toString('base64url')+'.testsignature';}
 function owner(header:string|undefined){try{return JSON.parse(Buffer.from((header||'').split('.')[1],'base64url').toString()).sub;}catch{return null;}}
 /** Mock service exercises the real browser SDK; database authorization is tested separately in PostgreSQL. */
-export async function service(page:Page){
+export type SharedDemoState={creditAccounts:Map<string,CreditAccount>;creditTransfers:CreditTransfer[];demoInvoices:Map<string,DemoInvoice>};
+export async function service(page:Page,shared?:SharedDemoState){
  const records=new Map<string,{snapshot:ReturnType<typeof seed>;revision:number}>();
  const requests:string[]=[];
- const creditAccounts=new Map<string,CreditAccount>();
- const creditTransfers:CreditTransfer[]=[];
+ const creditAccounts=shared?.creditAccounts||new Map<string,CreditAccount>();
+ const creditTransfers:CreditTransfer[]=shared?.creditTransfers||[];
+ const demoInvoices=shared?.demoInvoices||new Map<string,DemoInvoice>();
  const suppliers:{id:string;owner_id:string;business_name:string;wallet:string;chain:string;updated_at:string}[]=[];
- const faults={loseNextTransferResponse:false};
+ const faults={loseNextTransferResponse:false,loseNextInvoiceResponse:false,loseNextInvoicePaymentResponse:false};
  function ensure(id:string){if(!creditAccounts.has(id))creditAccounts.set(id,{user_id:id,receive_code:id===A?'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa':'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',balance_atomic:0,faucet_claimed:false,display_name:''});return creditAccounts.get(id)!;}
  function label(id:string){const a=ensure(id);return a.display_name||'Account '+a.receive_code.slice(0,8);}
  const feedback:{user_id:string;category:string;message:string;id:string;created_at:string}[]=[];
@@ -42,6 +45,21 @@ export async function service(page:Page){
   if(path==='/rest/v1/supplier_applications')return route.fulfill({json:[]});
   if(path==='/rest/v1/demo_credit_accounts')return route.fulfill({json:creditAccounts.has(id)?[creditAccounts.get(id)]:[]});
   if(path==='/rest/v1/demo_credit_transfers')return route.fulfill({json:creditTransfers.filter(t=>t.sender_id===id||t.recipient_id===id)});
+  if(path==='/rest/v1/rpc/afripay_demo_invoice_inbox')return route.fulfill({json:{invoices:[...demoInvoices.values()].filter(i=>i.issuer_id===id||i.payer_id===id).sort((a,b)=>b.created_at.localeCompare(a.created_at))}});
+  if(path==='/rest/v1/demo_invoice_requests'){const invoice=demoInvoices.get(new URL(request.url()).searchParams.get('id')?.replace('eq.','')||'');return invoice&&(invoice.issuer_id===id||invoice.payer_id===id)?route.fulfill({json:invoice}):route.fulfill({status:403,json:{message:'Invoice access denied'}});}
+  if(path==='/rest/v1/rpc/afripay_create_demo_invoice'){
+   const b=request.postDataJSON(),payer=[...creditAccounts.values()].find(a=>a.receive_code===b.p_payer_code);if(!payer||payer.user_id===id||!b.p_confirmed)return route.fulfill({status:400,json:{code:'P0001',message:'Review the customer account'}});
+   const prior=demoInvoices.get(b.p_id);if(prior)return route.fulfill({json:prior});
+   if([...demoInvoices.values()].some(i=>i.issuer_id===id&&i.reference.toLowerCase()===b.p_reference.trim().toLowerCase()))return route.fulfill({status:409,json:{code:'P0001',message:'Invoice reference already used'}});
+   const account=ensure(id);const invoice:DemoInvoice={id:b.p_id,issuer_id:id,payer_id:payer.user_id,issuer_code:account.receive_code,payer_code:payer.receive_code,issuer_label:label(id),payer_label:label(payer.user_id),reference:b.p_reference.trim(),amount_atomic:b.p_amount_atomic,description:b.p_description,state:'OPEN',transfer_id:null,created_at:new Date().toISOString(),paid_at:null};demoInvoices.set(invoice.id,invoice);
+   if(faults.loseNextInvoiceResponse){faults.loseNextInvoiceResponse=false;return route.fulfill({status:503,json:{message:'Invoice response temporarily unavailable'}});}return route.fulfill({json:invoice});
+  }
+  if(path==='/rest/v1/rpc/afripay_pay_demo_invoice'){
+   const b=request.postDataJSON(),invoice=demoInvoices.get(b.p_invoice_id);if(!invoice||invoice.payer_id!==id||!b.p_confirmed)return route.fulfill({status:403,json:{code:'P0001',message:'Invoice access denied'}});if(invoice.state==='PAID')return route.fulfill({json:invoice});const payer=ensure(id),issuer=ensure(invoice.issuer_id);if(invoice.state!=='OPEN'||payer.balance_atomic<invoice.amount_atomic)return route.fulfill({status:409,json:{code:'P0001',message:'Invoice unavailable or insufficient demo credits'}});
+   const transfer:CreditTransfer={id:b.p_request_id,sender_id:id,recipient_id:issuer.user_id,amount_atomic:invoice.amount_atomic,created_at:new Date().toISOString(),purpose:'friend',sender_label:label(id),recipient_label:label(issuer.user_id),invoice_id:'demo-inbox:'+invoice.id,invoice_number:invoice.reference};payer.balance_atomic-=invoice.amount_atomic;issuer.balance_atomic+=invoice.amount_atomic;creditTransfers.unshift(transfer);invoice.state='PAID';invoice.transfer_id=transfer.id;invoice.paid_at=transfer.created_at;
+   if(faults.loseNextInvoicePaymentResponse){faults.loseNextInvoicePaymentResponse=false;return route.fulfill({status:503,json:{message:'Payment response temporarily unavailable'}});}return route.fulfill({json:invoice});
+  }
+  if(path==='/rest/v1/rpc/afripay_cancel_demo_invoice'){const invoice=demoInvoices.get(request.postDataJSON().p_invoice_id);if(!invoice||invoice.issuer_id!==id||invoice.state==='PAID')return route.fulfill({status:409,json:{code:'P0001',message:'Cannot cancel invoice'}});invoice.state='CANCELLED';return route.fulfill({json:invoice});}
   if(path==='/rest/v1/rpc/afripay_open_demo_credit_account')return route.fulfill({json:[ensure(id)]});
   if(path==='/rest/v1/rpc/afripay_credit_summary')return route.fulfill({json:{schema_version:2,account:ensure(id),received_atomic:String(creditTransfers.filter(t=>t.recipient_id===id).reduce((v,t)=>v+t.amount_atomic,0)),sent_atomic:String(creditTransfers.filter(t=>t.sender_id===id).reduce((v,t)=>v+t.amount_atomic,0)),transfers:creditTransfers.filter(t=>t.sender_id===id||t.recipient_id===id)}});
   if(path==='/rest/v1/rpc/afripay_set_credit_name'){ensure(id).display_name=request.postDataJSON().p_name.trim();return route.fulfill({json:null});}
@@ -65,7 +83,7 @@ export async function service(page:Page){
   if(path==='/rest/v1/product_feedback'){if(request.method()==='POST'){feedback.push({...request.postDataJSON(),id:'feedback-'+feedback.length,created_at:new Date().toISOString()});return route.fulfill({status:201,json:{}});}return route.fulfill({json:feedback.filter(f=>f.user_id===id||id===ADMIN)});}
   return route.fulfill({status:404,json:{message:'Mock route not implemented'}});
  });
- return {records,requests,creditAccounts,creditTransfers,feedback,suppliers,faults};
+ return {records,requests,creditAccounts,creditTransfers,feedback,suppliers,faults,demoInvoices};
 }
 export async function signin(page:Page,email='alice@example.com'){
  await page.goto('/auth');await page.getByLabel('Email address',{exact:true}).fill(email);await page.getByLabel('Password',{exact:true}).fill('ValidPassword123!');await page.getByRole('button',{name:'Sign in',exact:true}).last().click();await expect(page.getByText(/Simulation saved privately in Supabase/)).toBeVisible();

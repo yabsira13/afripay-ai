@@ -1,0 +1,9 @@
+import {it,expect} from 'vitest';
+import {readFile} from 'node:fs/promises';
+import {PDFDocument} from 'pdf-lib';
+import {demoInvoiceInput,demoInvoiceInbox,demoInvoicePdf,demoInvoiceSchema} from '../lib/demo-invoices';
+const A='11111111-1111-4111-8111-111111111111',B='22222222-2222-4222-8222-222222222222',C='33333333-3333-4333-8333-333333333333';
+const invoice={id:C,issuer_id:A,payer_id:B,issuer_code:A,payer_code:B,issuer_label:'Café supply',payer_label:'Buyer',reference:'DEMO-001',amount_atomic:20000,description:'Design work',state:'OPEN' as const,transfer_id:null,created_at:'2026-11-13T09:00:00Z',paid_at:null};
+it('validates DUSD amount and a customer code without accepting client-supplied owner or Paid state',()=>{const input={id:C,payerCode:B,reference:'DEMO-001',amount:'200',description:'Work'};expect(demoInvoiceInput.safeParse(input).success).toBe(true);for(const changed of [{...input,amount:'0'},{...input,amount:'1000.01'},{...input,amount:'1e2'},{...input,payerCode:'bob@example.com'},{...input,issuer_id:B},{...input,state:'PAID'}])expect(demoInvoiceInput.safeParse(changed).success).toBe(false);});
+it('refuses a cross-account list or a Paid claim without the transfer and timestamp',()=>{expect(demoInvoiceInbox({invoices:[invoice]},A)).toHaveLength(1);expect(demoInvoiceInbox({invoices:[invoice]},B)).toHaveLength(1);expect(()=>demoInvoiceInbox({invoices:[invoice]},C)).toThrow(/does not belong/);expect(demoInvoiceSchema.safeParse({...invoice,state:'PAID'}).success).toBe(false);});
+it('generates a demo-only Unicode invoice PDF',async()=>{const [regular,bold]=await Promise.all(['DejaVuSans.ttf','DejaVuSans-Bold.ttf'].map(name=>readFile('public/fonts/'+name)));const bytes=await demoInvoicePdf(invoice,{regular,bold});const pdf=await PDFDocument.load(bytes);expect(pdf.getTitle()).toBe('AFRIPAY demo invoice DEMO-001');expect(pdf.getSubject()).toContain('no real funds');expect(pdf.getPageCount()).toBe(1);});

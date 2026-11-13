@@ -16,6 +16,8 @@ A changed wallet address or a fake urgent instruction can turn a supplier invoic
 
 **Without funds:** open the app in **Demo**, choose **Try guided invoice demo**, extract the sample fields and inspect the security report. DUSD transfers are simulated credits with no cash value; account records and transfers require sign-in.
 
+**Send a Demo invoice between two accounts:** the customer opens **Demo → Receive** and shares their Receive code. The issuer chooses **Invoices → Create invoice**, enters the code and bill details, reviews and sends. The customer opens **Received demo invoices**, approves a DUSD payment and both accounts see **Paid (demo)** with PDFs. No supplier/admin approval or blockchain wallet is required for this simulation; the customer can claim test credits in Receive if available.
+
 **With test tokens:** choose **NEAR testnet**, connect a testnet wallet, create/pay an invoice and open its transaction and PDF receipt. [Testnet walkthrough](docs/RELEASE-0.9.md).
 
 **Mainnet business flow:**
@@ -31,7 +33,7 @@ Uploading a supplier bill is a separate **Upload → Extract → Check → Revie
 
 - **Invoice intelligence:** PDF text, English image OCR, editable fields and explicit recipient confirmation. Changing the document clears its previous review.
 - **Security Shield:** explains changed destinations, repeated invoice references and suspicious instructions. It does not certify identity or guarantee safety.
-- **Business inbox and supplier dashboard:** private received/issued invoices, registered-business selection, optional links and status updates.
+- **Business inbox and supplier dashboard:** private mainnet received/issued invoices, registered-business selection, optional links and status updates. Demo has a separate Receive-code invoice inbox with atomic DUSD payments.
 - **Payment activity:** tracked sent/received native NEAR transfers, payment/invoice notifications, PDF invoices and receipts, and NEAR-order CSV export. BSC history is separate.
 - **AI assistant:** local structured proposals and optional configured model integration. AI cannot approve or sign a payment.
 
