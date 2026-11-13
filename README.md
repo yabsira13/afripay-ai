@@ -10,6 +10,23 @@ A changed wallet address or a fake urgent instruction can turn a supplier invoic
 
 ## Try it
 
+### Judge review account
+
+Open https://afripay-ai.vercel.app/ and sign in:
+
+- Email: `atsbaha.metaearth@gmail.com`
+- Password: `nykqo0-viVtuv-xuqdes`
+
+Choose a mode to review:
+
+- **Demo:** simulated DUSD invoices and sent/received activity.
+- **Live wallet (Mainnet):** saved payment activity, confirmations and receipts.
+- **NEAR testnet:** saved test-token payments and confirmations.
+
+Open the transaction explorer links to independently check the recorded blockchain results. No new payment or wallet connection is required to review saved records.
+
+This is a shared public review account. Do not enter personal information or connect a funded wallet. Demo credits have no cash value; mainnet transactions use real funds.
+
 **Judges:** use **Demo** or **NEAR testnet** to try the product. Issuing internal mainnet invoices requires administrator-approved supplier registration. The verified mainnet transfers below provide public payment evidence; the walkthrough explains the complete invoice flow.
 
 **Without funds:** open the app in **Demo**, choose **Try guided invoice demo**, extract the sample fields and inspect the security report. DUSD transfers are simulated credits with no cash value; account records and transfers require sign-in.
