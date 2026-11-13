@@ -1,12 +1,18 @@
 # AFRIPAY AI
 
+Built for **NEAR HACKATHON 2026** · Tracks: **Real-World Money**, **AI Security & Defense**
+
 **Intelligent payments. Borderless business.**
 
-An invoice and payments workspace for African businesses: review supplier bills, deliver invoices inside AFRIPAY, approve payments in your wallet and track verified settlement.
+A changed wallet address or a fake urgent instruction can turn a supplier invoice into a fraudulent payment. AFRIPAY AI helps African businesses review invoices, understand risk indicators and approve payments in their own wallet. Native NEAR invoices are marked **Paid** only after the exact bound payment passes final execution checks.
 
-[Live app](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **v0.9.5 + invoice inbox patches**
+[Live app](https://afripay-ai.vercel.app/) · [GitHub](https://github.com/yabsira13/afripay-ai) · **v0.9.5**
 
 ## Try it
+
+**Judges:** use **Demo** or **NEAR testnet** to try the product. Issuing internal mainnet invoices requires administrator-approved supplier registration. The verified mainnet transfers below provide public payment evidence; the walkthrough explains the complete invoice flow.
+
+[Judge walkthrough](docs/JUDGE-WALKTHROUGH.md) · [Demo video plan](docs/DEMO-VIDEO.md)
 
 **Without funds:** open the app in **Demo**, choose **Try guided invoice demo**, extract the sample fields and inspect the security report. DUSD transfers are simulated credits with no cash value; account records and transfers require sign-in.
 
@@ -41,7 +47,7 @@ Uploading a supplier bill is a separate **Upload → Extract → Check → Revie
 
 The **sending** network determines wallet approval. NEAR-funded cross-chain payments are approved on NEAR; direct BSC transfers require a BSC wallet and BNB for fees. Every payment needs explicit wallet approval. No gas sponsorship or arbitrary source-network support is claimed.
 
-Tracked wallet activity covers AFRIPAY-verified records, not every external transfer. Different assets are not combined into an invented USD balance. Optional model availability and private deployed inboxes were not independently exercised during the anonymous live review. The reviewer did not sign a transaction.
+Tracked wallet activity covers AFRIPAY-verified records, not every external transfer. Different assets are not combined into an invented USD balance. Optional model integration and private production inboxes require separate acceptance checks.
 
 ## Verified transactions
 
@@ -65,7 +71,7 @@ npm ci
 npm run dev
 ```
 
-Guest demo exploration needs no credentials. For accounts, copy `.env.example` to `.env.local` and configure Supabase. Private invoice/testnet services require the server-only `SUPABASE_SERVICE_ROLE_KEY`; mainnet funding is off by default through `LIVE_PAYMENTS_ENABLED=false`.
+Guest demo exploration needs no credentials. For accounts, copy `.env.example` to `.env.local` and configure Supabase. Private invoice/testnet services require the server-only `SUPABASE_SERVICE_ROLE_KEY`; the deployed mainnet operator flag was enabled at the 12 November review. Fresh local installations default to `LIVE_PAYMENTS_ENABLED=false` until configured; wallet approval is still required for every payment.
 
 Follow the [current setup and migration order](docs/SETUP.md). Existing installations should use the [focused invoice/payment patch guide](docs/patches/PAYMENTS-AND-INVOICE-INBOX.md). Keep `.env.local` out of Git and server credentials out of `NEXT_PUBLIC_` variables.
 
@@ -73,7 +79,7 @@ Follow the [current setup and migration order](docs/SETUP.md). Existing installa
 
 On **11 November 2026**, **408 automated tests** and TypeScript passed. The latest feature validation also passed **154 desktop/mobile regression checks**, 8 final document-review checks, the production build and a **44-route smoke check**.
 
-The live review confirmed the new entry screens, guest extraction, public token discovery and authentication barriers, with no JavaScript errors or horizontal overflow in the tested desktop/mobile views. Private and funded flows have a different evidence boundary: [review findings and limits](docs/reviews/REVIEW-2026-11-11.md).
+Public deployment checks and the limits of private/funded-flow verification are documented in the [review report](docs/reviews/REVIEW-2026-11-11.md).
 
 ```sh
 npm run typecheck
@@ -84,10 +90,16 @@ npm run test:smoke
 
 Browser tests use `npm run test:e2e` against a running app. [Setup details](docs/SETUP.md#verification).
 
+## Hackathon development
+
+The public repository history begins with [the initial commit on 7 November 2026](https://github.com/yabsira13/afripay-ai/commit/0f71026524847f189c6715bda1c3963722062089). Work recorded during the hackathon includes native mainnet payments, private invoice delivery, the supplier dashboard, settlement checks, notifications and PDF receipts.
+
+Publication dates do not establish the exact first coding date. The [development and reuse disclosure](docs/HACKATHON.md#development-and-reuse-disclosure) records what is confirmed and the remaining founder confirmation about any earlier code. AI assistance and third-party dependencies are disclosed below; any pre-window project baseline must be identified separately.
+
 ## Project
 
 Next.js · React · TypeScript · Supabase · NEAR Connect · official NEAR Intents 1Click SDK · pdf-lib · PDF.js · Tesseract.js.
 
-Built with AI assistance. [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md) · [Patch walkthrough](docs/patches/PAYMENTS-AND-INVOICE-INBOX.md) · [MIT License](LICENSE).
+Built with AI assistance. [Submission checklist](docs/HACKATHON.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md) · [Patch walkthrough](docs/patches/PAYMENTS-AND-INVOICE-INBOX.md) · [MIT License](LICENSE).
 
 **Founder:** Yabsera Teklemariyam · [yabsiratekle@gmail.com](mailto:yabsiratekle@gmail.com)
