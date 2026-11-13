@@ -12,8 +12,6 @@ A changed wallet address or a fake urgent instruction can turn a supplier invoic
 
 **Judges:** use **Demo** or **NEAR testnet** to try the product. Issuing internal mainnet invoices requires administrator-approved supplier registration. The verified mainnet transfers below provide public payment evidence; the walkthrough explains the complete invoice flow.
 
-[Judge walkthrough](docs/JUDGE-WALKTHROUGH.md) · [Demo video plan](docs/DEMO-VIDEO.md)
-
 **Without funds:** open the app in **Demo**, choose **Try guided invoice demo**, extract the sample fields and inspect the security report. DUSD transfers are simulated credits with no cash value; account records and transfers require sign-in.
 
 **Send a Demo invoice between two accounts:** the customer opens **Demo → Receive** and shares their Receive code. The issuer chooses **Invoices → Create invoice**, enters the code and bill details, reviews and sends. The customer opens **Received demo invoices**, approves a DUSD payment and both accounts see **Paid (demo)** with PDFs. No supplier/admin approval or blockchain wallet is required for this simulation; the customer can claim test credits in Receive if available.
